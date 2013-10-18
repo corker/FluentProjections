@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.20827.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections", "FluentProjections.csproj", "{E59CE405-E7FC-4E3C-B2C2-8390A977BC98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections", "FluentProjections\FluentProjections.csproj", "{E59CE405-E7FC-4E3C-B2C2-8390A977BC98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.Tests", "..\FluentProjections.Tests\FluentProjections.Tests.csproj", "{65081486-6F48-43EE-BFD8-BA82D0B72841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.Tests", "FluentProjections.Tests\FluentProjections.Tests.csproj", "{65081486-6F48-43EE-BFD8-BA82D0B72841}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{662ED28E-7C50-4322-A228-97287CBEB1D1}"
 	ProjectSection(SolutionItems) = preProject
