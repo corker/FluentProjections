@@ -1,34 +1,50 @@
-﻿namespace FluentProjections
+﻿using System;
+
+namespace FluentProjections
 {
     public class FluentEventHandlerConfiguration<TEvent, TProjection> : IFluentEventHandlerConfiguration
+        where TProjection : new()
     {
-        private FluentProjectionArgumentsBuilder<TEvent, TProjection> _argumentsBuilder;
-        private FluentProjectionProviderBuilder<TProjection> _providerBuilder;
+        private readonly FluentProjectionArgumentsBuilder<TEvent, TProjection> _argumentsBuilder;
+        private FluentEventHandlerType _eventType;
+
+        public FluentEventHandlerConfiguration()
+        {
+            _argumentsBuilder = new FluentProjectionArgumentsBuilder<TEvent, TProjection>();
+        }
 
         public void RegisterBy(IFluentEventHandlerRegisterer registerer)
         {
-            FluentEventHandler<TEvent, TProjection> handler = Configure();
+            IFluentEventHandler<TEvent, TProjection> handler = Configure();
             registerer.Register(handler);
         }
 
-        private FluentEventHandler<TEvent, TProjection> Configure()
+        private IFluentEventHandler<TEvent, TProjection> Configure()
         {
-            FluentProjectionProvider<TProjection> provider = _providerBuilder.Build();
             FluentProjectionArguments<TEvent, TProjection> arguments = _argumentsBuilder.Build();
-            return new FluentEventHandler<TEvent, TProjection>(provider, arguments);
+
+            switch (_eventType)
+            {
+                case FluentEventHandlerType.Insert:
+                    return new InsertFluentProjectionEventHandler<TEvent, TProjection>(arguments.Mappings);
+                case FluentEventHandlerType.Update:
+                    return new UpdateFluentProjectionEventHandler<TEvent, TProjection>(
+                        arguments.Filters,
+                        arguments.Mappings);
+                default:
+                    throw new NotImplementedException();
+            }
         }
 
         public IFluentProjectionMappingsBuilder<TEvent, TProjection> AddNew()
         {
-            _providerBuilder = new NewFluentProjectionProviderBuilder<TProjection>();
-            _argumentsBuilder = new FluentProjectionArgumentsBuilder<TEvent, TProjection>();
+            _eventType = FluentEventHandlerType.Insert;
             return _argumentsBuilder;
         }
 
         public FluentProjectionArgumentsBuilder<TEvent, TProjection> Update()
         {
-            _providerBuilder = new UpdateFluentProjectionProviderBuilder<TProjection>();
-            _argumentsBuilder = new FluentProjectionArgumentsBuilder<TEvent, TProjection>();
+            _eventType = FluentEventHandlerType.Update;
             return _argumentsBuilder;
         }
     }

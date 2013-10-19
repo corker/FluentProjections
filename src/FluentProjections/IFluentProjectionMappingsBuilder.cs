@@ -3,10 +3,10 @@ using System.Linq.Expressions;
 
 namespace FluentProjections
 {
-    public interface IFluentProjectionMappingsBuilder<TEvent, TProjection>
+    public interface IFluentProjectionMappingsBuilder<out TEvent, TProjection>
     {
         IFluentProjectionMappingsBuilder<TEvent, TProjection> Map<TValue>(
-            Expression<Func<TProjection, TValue>> projectionPropertyExpression,
-            Expression<Func<TEvent, TValue>> eventPropertyExpression);
+            Expression<Func<TProjection, TValue>> projectionProperty,
+            Func<TEvent, TValue> action);
     }
 }

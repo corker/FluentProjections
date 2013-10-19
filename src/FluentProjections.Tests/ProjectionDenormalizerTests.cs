@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace FluentProjections.Tests
 {
@@ -42,11 +44,32 @@ namespace FluentProjections.Tests
 
         private class TestRegisterer : IFluentEventHandlerRegisterer
         {
-            public IFluentEventHandler<TestEvent> Handler { get; private set; }
+            public IFluentEventHandler<TestEvent, TestProjection> Handler { get; private set; }
 
-            public void Register<TEvent>(IFluentEventHandler<TEvent> fluentEventHandler)
+            public void Register<TEvent, TProjection>(IFluentEventHandler<TEvent, TProjection> eventHandler)
             {
-                Handler = (IFluentEventHandler<TestEvent>) fluentEventHandler;
+                Handler = (IFluentEventHandler<TestEvent, TestProjection>) eventHandler;
+            }
+        }
+
+
+        private class TestStore : IFluentProjectionStore<TestProjection>
+        {
+            public TestProjection InsertProjection { get; private set; }
+
+            public IEnumerable<TestProjection> Read(FluentProjectionFilterValues values)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Update(TestProjection projection)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Insert(TestProjection projection)
+            {
+                InsertProjection = projection;
             }
         }
 
@@ -86,7 +109,7 @@ namespace FluentProjections.Tests
 
                 new TestConfiguration().RegisterBy(_targetRegisterer);
 
-                _targetRegisterer.Handler.Handle(new TestEvent
+                var @event = new TestEvent
                 {
                     ValueBoolean = true,
                     ValueByte = 1,
@@ -102,7 +125,13 @@ namespace FluentProjections.Tests
                     ValueInt16 = 10,
                     ValueUInt16 = 11,
                     ValueString = "s"
-                });
+                };
+
+                var store = new TestStore();
+
+                _targetRegisterer.Handler.Handle(@event, store);
+
+                _targetProjection = store.InsertProjection;
             }
 
             [Test]
@@ -114,79 +143,79 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_map_byte_value()
             {
-                Assert.Equals(1, _targetProjection.ValueByte);
+                Assert.AreEqual(1, _targetProjection.ValueByte);
             }
 
             [Test]
             public void Should_map_char_value()
             {
-                Assert.Equals('c', _targetProjection.ValueChar);
+                Assert.AreEqual('c', _targetProjection.ValueChar);
             }
 
             [Test]
             public void Should_map_decimal_value()
             {
-                Assert.Equals(3, _targetProjection.ValueDecimal);
+                Assert.AreEqual(3, _targetProjection.ValueDecimal);
             }
 
             [Test]
             public void Should_map_double_value()
             {
-                Assert.Equals(4, _targetProjection.ValueDouble);
+                Assert.AreEqual(4, _targetProjection.ValueDouble);
             }
 
             [Test]
             public void Should_map_int16_value()
             {
-                Assert.Equals(10, _targetProjection.ValueInt16);
+                Assert.AreEqual(10, _targetProjection.ValueInt16);
             }
 
             [Test]
             public void Should_map_int32_value()
             {
-                Assert.Equals(6, _targetProjection.ValueInt32);
+                Assert.AreEqual(6, _targetProjection.ValueInt32);
             }
 
             [Test]
             public void Should_map_int64_value()
             {
-                Assert.Equals(8, _targetProjection.ValueInt64);
+                Assert.AreEqual(8, _targetProjection.ValueInt64);
             }
 
             [Test]
             public void Should_map_sbyte_value()
             {
-                Assert.Equals(2, _targetProjection.ValueSByte);
+                Assert.AreEqual(2, _targetProjection.ValueSByte);
             }
 
             [Test]
             public void Should_map_single_value()
             {
-                Assert.Equals(5, _targetProjection.ValueSingle);
+                Assert.AreEqual(5, _targetProjection.ValueSingle);
             }
 
             [Test]
             public void Should_map_string_value()
             {
-                Assert.Equals("s", _targetProjection.ValueString);
+                Assert.AreEqual("s", _targetProjection.ValueString);
             }
 
             [Test]
             public void Should_map_uint16_value()
             {
-                Assert.Equals(11, _targetProjection.ValueUInt16);
+                Assert.AreEqual(11, _targetProjection.ValueUInt16);
             }
 
             [Test]
             public void Should_map_uint32_value()
             {
-                Assert.Equals(7, _targetProjection.ValueUInt32);
+                Assert.AreEqual(7, _targetProjection.ValueUInt32);
             }
 
             [Test]
             public void Should_map_uint64_value()
             {
-                Assert.Equals(9, _targetProjection.ValueUInt64);
+                Assert.AreEqual(9, _targetProjection.ValueUInt64);
             }
         }
     }

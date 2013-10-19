@@ -39,26 +39,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FluentEventHandler.cs" />
+    <Compile Include="FluentEventHandlerType.cs" />
+    <Compile Include="InsertFluentProjectionEventHandler.cs" />
+    <Compile Include="UpdateFluentProjectionEventHandler.cs" />
     <Compile Include="FluentEventHandlerConfiguration.cs" />
     <Compile Include="FluentProjectionArguments.cs" />
     <Compile Include="FluentProjectionConfiguration.cs" />
     <Compile Include="FluentProjectionFilter.cs" />
+    <Compile Include="FluentProjectionFilters.cs" />
+    <Compile Include="FluentProjectionFilterValue.cs" />
     <Compile Include="FluentProjectionFilterValues.cs" />
     <Compile Include="FluentProjectionMapping.cs" />
     <Compile Include="FluentProjectionMappings.cs" />
     <Compile Include="FluentProjectionProvider.cs" />
-    <Compile Include="FluentProjectionProviderBuilder.cs" />
+    <Compile Include="IFluentProjectionStoreBuilder.cs" />
     <Compile Include="IFluentEventHandler.cs" />
     <Compile Include="IFluentEventHandlerConfiguration.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
     <Compile Include="IFluentProjectionMappingsBuilder.cs" />
-    <Compile Include="NewFluentProjectionProvider.cs" />
-    <Compile Include="NewFluentProjectionProviderBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FluentProjectionArgumentsBuilder.cs" />
-    <Compile Include="UpdateFluentProjectionProvider.cs" />
-    <Compile Include="UpdateFluentProjectionProviderBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

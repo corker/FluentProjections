@@ -2,6 +2,6 @@
 {
     public interface IFluentEventHandlerRegisterer
     {
-        void Register<TEvent>(IFluentEventHandler<TEvent> fluentEventHandler);
+        void Register<TEvent, TProjection>(IFluentEventHandler<TEvent, TProjection> eventHandler);
     }
 }

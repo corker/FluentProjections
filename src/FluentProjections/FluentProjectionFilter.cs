@@ -1,10 +1,22 @@
-﻿namespace FluentProjections
+﻿using System;
+using System.Reflection;
+
+namespace FluentProjections
 {
     public class FluentProjectionFilter<TEvent>
     {
-        public FluentProjectionFilterValues GetValues(TEvent @event)
+        private readonly Func<TEvent, object> _getValue;
+        private readonly PropertyInfo _property;
+
+        public FluentProjectionFilter(PropertyInfo property, Func<TEvent, object> getValue)
         {
-            return new FluentProjectionFilterValues();
+            _property = property;
+            _getValue = getValue;
+        }
+
+        public FluentProjectionFilterValue GetValue(TEvent @event)
+        {
+            return new FluentProjectionFilterValue(_property, _getValue(@event));
         }
     }
 }
