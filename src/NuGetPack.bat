@@ -1,2 +1,2 @@
 .nuget\NuGet Update -self
-.nuget\NuGet pack FluentProjections\FluentProjections.csproj
+.nuget\NuGet pack -sym FluentProjections\FluentProjections.csproj

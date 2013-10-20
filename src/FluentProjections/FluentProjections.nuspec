@@ -12,8 +12,4 @@
     <licenseUrl>https://raw.github.com/corker/fluent-projections/master/LICENSE</licenseUrl>
     <tags>CQRS EventSource</tags>
   </metadata>
-  <files>
-    <file src="bin\$configuration$\$id$.dll" target="lib\net40" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net40" />
-  </files>
 </package>
