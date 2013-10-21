@@ -37,25 +37,23 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FluentEventHandlerType.cs" />
-    <Compile Include="InsertFluentProjectionEventHandler.cs" />
-    <Compile Include="UpdateFluentProjectionEventHandler.cs" />
-    <Compile Include="FluentEventHandlerConfiguration.cs" />
-    <Compile Include="FluentProjectionArguments.cs" />
-    <Compile Include="FluentProjectionConfiguration.cs" />
-    <Compile Include="FluentProjectionFilter.cs" />
-    <Compile Include="FluentProjectionFilters.cs" />
+    <Compile Include="EventHandlers\InsertFluentProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\UpdateFluentProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\EventHandlerConfigurer.cs" />
+    <Compile Include="FluentProjectionConfigurationn.cs" />
+    <Compile Include="EventHandlers\Arguments\FluentProjectionFilter.cs" />
+    <Compile Include="EventHandlers\Arguments\FluentProjectionFilters.cs" />
     <Compile Include="FluentProjectionFilterValue.cs" />
     <Compile Include="FluentProjectionFilterValues.cs" />
-    <Compile Include="FluentProjectionMapping.cs" />
-    <Compile Include="FluentProjectionMappings.cs" />
+    <Compile Include="EventHandlers\Arguments\EventMapper.cs" />
+    <Compile Include="EventHandlers\Arguments\EventMappers.cs" />
     <Compile Include="IFluentProjectionStore.cs" />
     <Compile Include="IFluentEventHandler.cs" />
-    <Compile Include="IFluentEventHandlerConfiguration.cs" />
+    <Compile Include="EventHandlers\IEventHandlerConfigurer.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
-    <Compile Include="IFluentProjectionMappingsBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\IEventMapperBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FluentProjectionArgumentsBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\ArgumentsBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentProjections.nuspec" />

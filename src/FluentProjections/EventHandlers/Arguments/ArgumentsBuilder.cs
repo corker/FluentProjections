@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace FluentProjections
+namespace FluentProjections.EventHandlers.Arguments
 {
-    public class FluentProjectionArgumentsBuilder<TEvent, TProjection> :
-        IFluentProjectionMappingsBuilder<TEvent, TProjection>
+    public class ArgumentsBuilder<TEvent, TProjection> :
+        IEventMapperBuilder<TEvent, TProjection>
     {
         private readonly List<FluentProjectionFilter<TEvent>> _filters;
-        private readonly List<FluentProjectionMapping<TEvent, TProjection>> _mappings;
+        private readonly List<EventMapper<TEvent, TProjection>> _mappers;
 
-        public FluentProjectionArgumentsBuilder()
+        public ArgumentsBuilder()
         {
             _filters = new List<FluentProjectionFilter<TEvent>>();
-            _mappings = new List<FluentProjectionMapping<TEvent, TProjection>>();
+            _mappers = new List<EventMapper<TEvent, TProjection>>();
         }
 
-        public IFluentProjectionMappingsBuilder<TEvent, TProjection> Map<TValue>(
+        public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
             Action<TProjection, TValue> setter = GetSetter(projectionProperty);
-            Action<TEvent, TProjection> mappingAction = (e, p) => setter(p, getValue(e));
-            _mappings.Add(new FluentProjectionMapping<TEvent, TProjection>(mappingAction));
+            Action<TEvent, TProjection> action = (e, p) => setter(p, getValue(e));
+            _mappers.Add(new EventMapper<TEvent, TProjection>(action));
             return this;
         }
 
@@ -46,7 +46,7 @@ namespace FluentProjections
             return setterExpression.Compile();
         }
 
-        public FluentProjectionArgumentsBuilder<TEvent, TProjection> FilterBy<TValue>(
+        public ArgumentsBuilder<TEvent, TProjection> FilterBy<TValue>(
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, object> getValue)
         {
@@ -57,11 +57,14 @@ namespace FluentProjections
             return this;
         }
 
-        public FluentProjectionArguments<TEvent, TProjection> Build()
+        public FluentProjectionFilters<TEvent> BuildFilters()
         {
-            var filters = new FluentProjectionFilters<TEvent>(_filters);
-            var mappings = new FluentProjectionMappings<TEvent, TProjection>(_mappings);
-            return new FluentProjectionArguments<TEvent, TProjection>(filters, mappings);
+            return new FluentProjectionFilters<TEvent>(_filters);
+        }
+
+        public EventMappers<TEvent, TProjection> BuildMappers()
+        {
+            return new EventMappers<TEvent, TProjection>(_mappers);
         }
     }
 }

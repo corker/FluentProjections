@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace FluentProjections
+namespace FluentProjections.EventHandlers.Arguments
 {
-    public class FluentProjectionMapping<TEvent, TProjection>
+    public class EventMapper<TEvent, TProjection>
     {
         private readonly Action<TEvent, TProjection> _action;
 
-        public FluentProjectionMapping(Action<TEvent, TProjection> action)
+        public EventMapper(Action<TEvent, TProjection> action)
         {
             _action = action;
         }

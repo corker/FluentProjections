@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using FluentProjections.EventHandlers.Arguments;
 
-namespace FluentProjections
+namespace FluentProjections.EventHandlers
 {
     public class UpdateFluentProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent, TProjection>
     {
         private readonly FluentProjectionFilters<TEvent> _filters;
-        private readonly FluentProjectionMappings<TEvent, TProjection> _mappings;
+        private readonly EventMappers<TEvent, TProjection> _mappers;
 
         public UpdateFluentProjectionEventHandler(FluentProjectionFilters<TEvent> filters,
-            FluentProjectionMappings<TEvent, TProjection> mappings)
+            EventMappers<TEvent, TProjection> mappers)
         {
             _filters = filters;
-            _mappings = mappings;
+            _mappers = mappers;
         }
 
         public void Handle(TEvent @event, IFluentProjectionStore<TProjection> store)
@@ -20,7 +21,7 @@ namespace FluentProjections
             IEnumerable<TProjection> projections = store.Read(filterValues);
             foreach (TProjection projection in projections)
             {
-                _mappings.Apply(@event, projection);
+                _mappers.Map(@event, projection);
                 store.Update(projection);
             }
         }

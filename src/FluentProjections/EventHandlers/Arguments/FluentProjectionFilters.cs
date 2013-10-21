@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FluentProjections
+namespace FluentProjections.EventHandlers.Arguments
 {
     public class FluentProjectionFilters<TEvent>
     {
