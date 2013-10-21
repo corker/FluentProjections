@@ -49,8 +49,7 @@
     <Compile Include="FluentProjectionFilterValues.cs" />
     <Compile Include="FluentProjectionMapping.cs" />
     <Compile Include="FluentProjectionMappings.cs" />
-    <Compile Include="FluentProjectionProvider.cs" />
-    <Compile Include="IFluentProjectionStoreBuilder.cs" />
+    <Compile Include="IFluentProjectionStore.cs" />
     <Compile Include="IFluentEventHandler.cs" />
     <Compile Include="IFluentEventHandlerConfiguration.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
