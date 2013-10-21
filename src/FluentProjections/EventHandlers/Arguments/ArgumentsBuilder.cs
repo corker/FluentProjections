@@ -10,11 +10,13 @@ namespace FluentProjections.EventHandlers.Arguments
     {
         private readonly List<FluentProjectionFilter<TEvent>> _filters;
         private readonly List<EventMapper<TEvent, TProjection>> _mappers;
+        private Type _eventType;
 
         public ArgumentsBuilder()
         {
             _filters = new List<FluentProjectionFilter<TEvent>>();
             _mappers = new List<EventMapper<TEvent, TProjection>>();
+            _eventType = typeof (TEvent);
         }
 
         public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(
@@ -27,10 +29,21 @@ namespace FluentProjections.EventHandlers.Arguments
             return this;
         }
 
-        private static Action<TProjection, TValue> GetSetter<TValue>(Expression<Func<TProjection, TValue>> expression)
+        public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
+        {
+            var propertyInfo = _eventType.GetProperty(GetPropertyInfo(projectionProperty).Name);
+            return Map(projectionProperty, e => (TValue)propertyInfo.GetValue(e, new object[0]));
+        }
+
+        private static PropertyInfo GetPropertyInfo<TValue>(Expression<Func<TProjection, TValue>> expression)
         {
             var memberExpression = (MemberExpression) expression.Body;
-            var property = (PropertyInfo) memberExpression.Member;
+            return (PropertyInfo) memberExpression.Member;
+        }
+
+        private static Action<TProjection, TValue> GetSetter<TValue>(Expression<Func<TProjection, TValue>> expression)
+        {
+            var property = GetPropertyInfo(expression);
             MethodInfo setMethod = property.GetSetMethod();
 
             ParameterExpression parameterProjection = Expression.Parameter(typeof (TProjection), "projection");

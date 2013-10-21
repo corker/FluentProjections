@@ -8,5 +8,7 @@ namespace FluentProjections.EventHandlers.Arguments
         IEventMapperBuilder<TEvent, TProjection> Map<TValue>(
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> action);
+
+        IEventMapperBuilder<TEvent, TProjection> Map<TValue>(Expression<Func<TProjection, TValue>> projectionProperty);
     }
 }
