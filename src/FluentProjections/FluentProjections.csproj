@@ -40,7 +40,7 @@
     <Compile Include="EventHandlers\InsertFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\UpdateFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\EventHandlerConfigurer.cs" />
-    <Compile Include="FluentProjectionConfigurationn.cs" />
+    <Compile Include="FluentProjectionConfiguration.cs" />
     <Compile Include="EventHandlers\Arguments\FluentProjectionFilter.cs" />
     <Compile Include="EventHandlers\Arguments\FluentProjectionFilters.cs" />
     <Compile Include="FluentProjectionFilterValue.cs" />
