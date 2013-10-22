@@ -8,9 +8,9 @@ namespace FluentProjections.EventHandlers.Arguments
     public class ArgumentsBuilder<TEvent, TProjection> :
         IEventMapperBuilder<TEvent, TProjection>
     {
+        private readonly Type _eventType;
         private readonly List<FluentProjectionFilter<TEvent>> _filters;
         private readonly List<EventMapper<TEvent, TProjection>> _mappers;
-        private Type _eventType;
 
         public ArgumentsBuilder()
         {
@@ -19,48 +19,122 @@ namespace FluentProjections.EventHandlers.Arguments
             _eventType = typeof (TEvent);
         }
 
-        public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(
-            Expression<Func<TProjection, TValue>> projectionProperty,
-            Func<TEvent, TValue> getValue)
+        public IEventMapperBuilder<TEvent, TProjection> Do(Action<TEvent, TProjection> action)
         {
-            Action<TProjection, TValue> setter = GetSetter(projectionProperty);
-            Action<TEvent, TProjection> action = (e, p) => setter(p, getValue(e));
             _mappers.Add(new EventMapper<TEvent, TProjection>(action));
             return this;
         }
 
+        public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(Expression<Func<TProjection, TValue>> projectionProperty,
+            Func<TEvent, TValue> getValue)
+        {
+            return Do(CreateSetOperation(projectionProperty), getValue);
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Add<TValue>(Expression<Func<TProjection, TValue>> projectionProperty,
+            Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
+        {
+            return Do(CreateBinaryOperation(ExpressionType.Add, projectionProperty), getValue);
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Substract<TValue>(Expression<Func<TProjection, TValue>> projectionProperty,
+            Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
+        {
+            return Do(CreateBinaryOperation(ExpressionType.Subtract, projectionProperty), getValue);
+        }
+
         public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
         {
-            var propertyInfo = _eventType.GetProperty(GetPropertyInfo(projectionProperty).Name);
+            PropertyInfo propertyInfo = GetEventPropertyInfo(projectionProperty);
+            return Map(projectionProperty, e => GetPropertyValue<TValue>(e, propertyInfo));
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Add<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
+            where TValue : IComparable<TValue>
+        {
+            PropertyInfo propertyInfo = GetEventPropertyInfo(projectionProperty);
+            return Add(projectionProperty, e => GetPropertyValue<TValue>(e, propertyInfo));
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Substract<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
+            where TValue : IComparable<TValue>
+        {
+            PropertyInfo propertyInfo = GetEventPropertyInfo(projectionProperty);
+            return Substract(projectionProperty, e => GetPropertyValue<TValue>(e, propertyInfo));
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Increment(Expression<Func<TProjection, long>> projectionProperty)
+        {
+            return Add(projectionProperty, e => 1);
+        }
+
+        public IEventMapperBuilder<TEvent, TProjection> Decrement(Expression<Func<TProjection, long>> projectionProperty)
+        {
+            return Substract(projectionProperty, e => 1);
+        }
+
+        private static TValue GetPropertyValue<TValue>(TEvent @event, PropertyInfo propertyInfo)
+        {
+            return (TValue) propertyInfo.GetValue(@event, new object[0]);
+        }
+
+        private PropertyInfo GetEventPropertyInfo<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
+        {
+            PropertyInfo propertyInfo = _eventType.GetProperty(GetPropertyInfo(projectionProperty).Name);
             if (propertyInfo == null)
             {
                 throw new ArgumentOutOfRangeException("projectionProperty", "No associated event property found.");
             }
-            return Map(projectionProperty, e => (TValue)propertyInfo.GetValue(e, new object[0]));
+            return propertyInfo;
+        }
+
+        private IEventMapperBuilder<TEvent, TProjection> Do<TValue>(Action<TProjection, TValue> action, Func<TEvent, TValue> getValue)
+        {
+            return Do((e, p) => action(p, getValue(e)));
         }
 
         private static PropertyInfo GetPropertyInfo<TValue>(Expression<Func<TProjection, TValue>> expression)
         {
-            var memberExpression = (MemberExpression) expression.Body;
-            return (PropertyInfo) memberExpression.Member;
+            return (PropertyInfo) ((MemberExpression) expression.Body).Member;
         }
 
-        private static Action<TProjection, TValue> GetSetter<TValue>(Expression<Func<TProjection, TValue>> expression)
+        private static Action<TProjection, TValue> CreateSetOperation<TValue>(Expression<Func<TProjection, TValue>> expression)
         {
-            var property = GetPropertyInfo(expression);
+            PropertyInfo property = GetPropertyInfo(expression);
             MethodInfo setMethod = property.GetSetMethod();
 
             ParameterExpression parameterProjection = Expression.Parameter(typeof (TProjection), "projection");
             ParameterExpression parameterValue = Expression.Parameter(typeof (TValue), "value");
 
-            Expression<Action<TProjection, TValue>> setterExpression =
+            Expression<Action<TProjection, TValue>> lambda =
                 Expression.Lambda<Action<TProjection, TValue>>(
                     Expression.Call(parameterProjection, setMethod, parameterValue),
                     parameterProjection,
                     parameterValue
                     );
 
-            return setterExpression.Compile();
+            return lambda.Compile();
+        }
+
+        private static Action<TProjection, TValue> CreateBinaryOperation<TValue>(ExpressionType type, Expression<Func<TProjection, TValue>> expression)
+            where TValue : IComparable<TValue>
+        {
+            PropertyInfo property = GetPropertyInfo(expression);
+            MethodInfo getMethod = property.GetGetMethod();
+            MethodInfo setMethod = property.GetSetMethod();
+
+            ParameterExpression parameterProjection = Expression.Parameter(typeof (TProjection), "projection");
+            ParameterExpression parameterValue = Expression.Parameter(typeof (TValue), "value");
+
+            Expression<Action<TProjection, TValue>> lambda =
+                Expression.Lambda<Action<TProjection, TValue>>(
+                    Expression.Call(parameterProjection, setMethod,
+                        Expression.MakeBinary(type, Expression.Call(parameterProjection, getMethod), parameterValue)),
+                    parameterProjection,
+                    parameterValue
+                    );
+
+            return lambda.Compile();
         }
 
         public ArgumentsBuilder<TEvent, TProjection> FilterBy<TValue>(
