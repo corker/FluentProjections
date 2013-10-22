@@ -32,6 +32,10 @@ namespace FluentProjections.EventHandlers.Arguments
         public IEventMapperBuilder<TEvent, TProjection> Map<TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
         {
             var propertyInfo = _eventType.GetProperty(GetPropertyInfo(projectionProperty).Name);
+            if (propertyInfo == null)
+            {
+                throw new ArgumentOutOfRangeException("projectionProperty", "No associated event property found.");
+            }
             return Map(projectionProperty, e => (TValue)propertyInfo.GetValue(e, new object[0]));
         }
 

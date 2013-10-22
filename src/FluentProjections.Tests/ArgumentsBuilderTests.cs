@@ -1,4 +1,5 @@
-﻿using FluentProjections.EventHandlers.Arguments;
+﻿using System;
+using FluentProjections.EventHandlers.Arguments;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests
@@ -15,43 +16,55 @@ namespace FluentProjections.Tests
         {
             public long SimplyMappedProjectionProperty { get; set; }
             public string MappedByName { get; set; }
+            public string NoEventProperty { get; set; }
         }
 
         [TestFixture]
         public class When_event_mapped_to_projection
         {
-            private TestEvent _targetEvent;
-            private TestProjection _targetProjection;
-
-            [TestFixtureSetUp]
-            public void Init()
+            [Test]
+            public void Should_do_mapping_by_projection_property_name()
             {
-                _targetEvent = new TestEvent
-                {
-                    SimplyMappedEventProperty = 777,
-                    MappedByName = "MappedByName"
-                };
-
-                _targetProjection = new TestProjection();
-
+                // Arrange
+                var @event = new TestEvent {MappedByName = "MappedByName"};
+                var projection = new TestProjection();
                 var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
-                builder
-                    .Map(p => p.SimplyMappedProjectionProperty, e => e.SimplyMappedEventProperty)
-                    .Map(p => p.MappedByName);
+                builder.Map(p => p.MappedByName);
 
-                builder.BuildMappers().Map(_targetEvent, _targetProjection);
+                // Act
+                builder.BuildMappers().Map(@event, projection);
+
+                // Assert
+                Assert.AreEqual(@event.MappedByName, projection.MappedByName);
             }
 
             [Test]
             public void Should_do_simple_mapping()
             {
-                Assert.AreEqual(_targetEvent.SimplyMappedEventProperty, _targetProjection.SimplyMappedProjectionProperty);
+                // Arrange
+                var @event = new TestEvent {SimplyMappedEventProperty = 777};
+                var projection = new TestProjection();
+                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                builder.Map(p => p.SimplyMappedProjectionProperty, e => e.SimplyMappedEventProperty);
+
+                // Act
+                builder.BuildMappers().Map(@event, projection);
+
+                // Assert
+                Assert.AreEqual(@event.SimplyMappedEventProperty, projection.SimplyMappedProjectionProperty);
             }
 
             [Test]
-            public void Should_do_mapping_by_projection_property_name()
+            public void Should_throw_if_no_event_property_found()
             {
-                Assert.AreEqual(_targetEvent.MappedByName, _targetProjection.MappedByName);
+                // Arrange
+                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+
+                // Act
+                var @delegate = new TestDelegate(() => builder.Map(p => p.NoEventProperty));
+
+                // Assert
+                Assert.Throws<ArgumentOutOfRangeException>(@delegate);
             }
         }
     }
