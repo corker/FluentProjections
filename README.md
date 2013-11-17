@@ -93,7 +93,7 @@ A single event can be translated into a series of objects.
 Translated objects can be configured to be handled the same way as oher events.
 See tests.
 
-Who I am?
+Who am I?
 --
 My name is Michael Borisov. I'm interested in CQRS, event sourcing and service oriented architecture.
 
