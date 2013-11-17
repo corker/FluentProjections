@@ -65,8 +65,19 @@ public class TestConfiguration : FluentProjectionConfiguration<TestProjection>
     public TestConfiguration()
     {
         ForEvent<TestEvent>()
+            .Translate(e => new[]
+            {
+                new TestTranslatedEvent { ... },
+                new TestTranslatedEvent { ... }
+            })
             .AddNew()
-            .Map(p => p.ValueInt32, e => e.ValueInt32);
+            .Map(p => p.Id, e => e.Id)
+            .Map(p => p.Name, e => e.Name);
+            
+        ForEvent<TestEvent>()
+            .Update()
+            .FilterBy(p => p.Id, e => e.Id)
+            .Map(p => p.Name, e => e.Name);
     }
 }
 ```
