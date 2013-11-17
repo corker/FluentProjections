@@ -7,7 +7,7 @@ namespace FluentProjections.EventHandlers
         where TProjection : new()
     {
         private readonly ArgumentsBuilder<TEvent, TProjection> _argumentsBuilder;
-        private EventHandlerType _handlerType;
+        private Func<IFluentEventHandler<TEvent, TProjection>> _createHandler;
 
         public EventHandlerConfigurer()
         {
@@ -16,28 +16,14 @@ namespace FluentProjections.EventHandlers
 
         public void RegisterBy(IFluentEventHandlerRegisterer registerer)
         {
-            IFluentEventHandler<TEvent, TProjection> handler = Configure();
+            IFluentEventHandler<TEvent, TProjection> handler = _createHandler();
             registerer.Register(handler);
         }
 
-        private IFluentEventHandler<TEvent, TProjection> Configure()
+        public IEventMapperBuilder<TEvent, TProjection> AddNew()
         {
-            switch (_handlerType)
-            {
-                case EventHandlerType.Insert:
-                    return CreateInsertEventHandler();
-                case EventHandlerType.Update:
-                    return CreateUpdateEventHandler();
-                default:
-                    throw new NotImplementedException();
-            }
-        }
-
-        private IFluentEventHandler<TEvent, TProjection> CreateUpdateEventHandler()
-        {
-            EventMappers<TEvent, TProjection> mappers = _argumentsBuilder.BuildMappers();
-            FluentProjectionFilters<TEvent> filters = _argumentsBuilder.BuildFilters();
-            return new UpdateFluentProjectionEventHandler<TEvent, TProjection>(filters, mappers);
+            _createHandler = CreateInsertEventHandler;
+            return _argumentsBuilder;
         }
 
         private IFluentEventHandler<TEvent, TProjection> CreateInsertEventHandler()
@@ -46,22 +32,17 @@ namespace FluentProjections.EventHandlers
             return new InsertFluentProjectionEventHandler<TEvent, TProjection>(mappers);
         }
 
-        public IEventMapperBuilder<TEvent, TProjection> AddNew()
-        {
-            _handlerType = EventHandlerType.Insert;
-            return _argumentsBuilder;
-        }
-
         public ArgumentsBuilder<TEvent, TProjection> Update()
         {
-            _handlerType = EventHandlerType.Update;
+            _createHandler = CreateUpdateEventHandler;
             return _argumentsBuilder;
         }
 
-        private enum EventHandlerType
+        private IFluentEventHandler<TEvent, TProjection> CreateUpdateEventHandler()
         {
-            Insert,
-            Update
+            EventMappers<TEvent, TProjection> mappers = _argumentsBuilder.BuildMappers();
+            FluentProjectionFilters<TEvent> filters = _argumentsBuilder.BuildFilters();
+            return new UpdateFluentProjectionEventHandler<TEvent, TProjection>(filters, mappers);
         }
     }
 }
