@@ -23,18 +23,27 @@ I'm a big fan of configuring and I want to share with you the idea of configurab
 How?
 ====
 
-There is not much you can do right now - only to map properties directly. There is no concrete persistence implementations, so stay tuned!
+There is not much you can do right now - only to map properties directly.
 
-To be able to use FluentProjections you have to do the following steps.
+There is no concrete persistence implementations, so stay tuned!
 
-1. Implement IFluentProjectionStore<TProjection>
+To be able to use FluentProjections you need to do the following steps.
+
+1. Install a nuget package
+--
+
+```
+Install-Package FluentProjections
+```
+
+2. Implement IFluentProjectionStore<TProjection>
 --
 
 IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
 
 Later I'm going to provide implementation for different database types, but right now it's not there.
 
-2. Implement IFluentEventHandlerRegisterer
+3. Implement IFluentEventHandlerRegisterer
 --
 
 IFluentEventHandlerRegisterer is a bridge between FluentProjections and your event bus. I don't know what event bus you use, so it's up to you how to register handlers in your code.
@@ -45,7 +54,7 @@ In this case implementation for registerer should create that generic event hand
 
 Later I'm going to provide implementation for different event sourcing frameworks, but right now it's not there.
 
-3. Implement your projection configurations
+4. Implement your projection configurations
 --
 
 Here is an example:
@@ -62,7 +71,7 @@ public class TestConfiguration : FluentProjectionConfiguration<TestProjection>
 }
 ```
 
-4. Register your projection configurations
+5. Register your projection configurations
 --
 
 Here is an example:
