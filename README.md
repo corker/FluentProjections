@@ -85,6 +85,14 @@ On a project website you can find a test project where more examples can be obse
 
 Happy coding!
 
+What’s new?
+-----------
+
+**Nov 17th, 2013**      
+A single event can be translated into a series of objects.
+Translated objects can be configured to be handled the same way as oher events.
+See tests.
+
 Who I am?
 --
 My name is Michael Borisov. I'm interested in CQRS, event sourcing and service oriented architecture.
