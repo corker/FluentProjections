@@ -98,9 +98,7 @@ What’s new?
 -----------
 
 **Nov 17th, 2013**      
-A single event can be translated into a series of objects.
-Translated objects can be configured to be handled the same way as oher events.
-See tests.
+A single event can be translated into a series of objects. Translated objects can be handled the same way as other events.
 
 Who am I?
 --
