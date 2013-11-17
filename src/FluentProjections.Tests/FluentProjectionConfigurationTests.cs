@@ -36,7 +36,7 @@ namespace FluentProjections.Tests
             public FluentProjectionFilterValues FilterValues { get; private set; }
             public TestProjection ReadProjection { get; private set; }
             public TestProjection UpdateProjection { get; private set; }
-            public TestProjection InsertProjection { get; private set; }
+            public List<TestProjection> InsertProjections { get; private set; }
 
             public IEnumerable<TestProjection> Read(FluentProjectionFilterValues values)
             {
@@ -51,7 +51,8 @@ namespace FluentProjections.Tests
 
             public void Insert(TestProjection projection)
             {
-                InsertProjection = projection;
+                InsertProjections = InsertProjections ?? new List<TestProjection>();
+                InsertProjections.Add(projection);
             }
         }
 
@@ -89,9 +90,15 @@ namespace FluentProjections.Tests
             }
 
             [Test]
-            public void Should_add_new_projection_with_mapped_values()
+            public void Should_add_new_projection()
             {
-                Assert.AreEqual(777, _targetStore.InsertProjection.ValueInt32);
+                Assert.AreEqual(1, _targetStore.InsertProjections.Count);
+            }
+
+            [Test]
+            public void Should_map_values()
+            {
+                Assert.AreEqual(777, _targetStore.InsertProjections.Single().ValueInt32);
             }
         }
 
@@ -161,6 +168,69 @@ namespace FluentProjections.Tests
             public void Should_update_with_the_same_projection()
             {
                 Assert.AreSame(_targetProjection, _targetStore.UpdateProjection);
+            }
+        }
+
+        [TestFixture]
+        public class When_event_translated
+        {
+            private class TestTranslatedEvent
+            {
+                public int TranslatedValue { get; set; }
+            }
+
+            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            {
+                public TestConfiguration()
+                {
+                    ForEvent<TestEvent>()
+                        .Translate(e => new[]
+                        {
+                            new TestTranslatedEvent
+                            {
+                                TranslatedValue = e.ValueInt32
+                            },
+                            new TestTranslatedEvent
+                            {
+                                TranslatedValue = e.ValueInt32 + 1
+                            }
+                        })
+                        .AddNew()
+                        .Map(p => p.ValueInt32, e => e.TranslatedValue);
+                }
+            }
+
+            private TestStore _targetStore;
+            private TestRegisterer _targetRegisterer;
+
+            [TestFixtureSetUp]
+            public void Init()
+            {
+                _targetRegisterer = new TestRegisterer();
+
+                new TestConfiguration().RegisterBy(_targetRegisterer);
+
+                _targetStore = new TestStore(null);
+
+                var @event = new TestEvent
+                {
+                    ValueInt32 = 777
+                };
+
+                _targetRegisterer.Handler.Handle(@event, _targetStore);
+            }
+
+            [Test]
+            public void Should_translate_event_to_a_list_of_events()
+            {
+                Assert.AreEqual(2, _targetStore.InsertProjections.Count);
+            }
+
+            [Test]
+            public void Should_map_values()
+            {
+                Assert.AreEqual(777, _targetStore.InsertProjections.First().ValueInt32);
+                Assert.AreEqual(778, _targetStore.InsertProjections.Last().ValueInt32);
             }
         }
     }
