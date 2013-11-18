@@ -1,12 +1,12 @@
 fluent-projections
 ==================
 
-Fluent Projections provides a configurable hub that can handle events and map them to database projections (read models).
+Fluent Projections provides a configurable hub that can handle events and map them to database projection tables (read models).
 
 Why?
 ====
 
-When CQRS and Event Sourcing come in, you have to deal with projections or read models. Projection contains data prepared for a specific view. To process events we use so called denormalizers. Denormalizer is a hub that handle domain evens and map them to a projection. To define a mapping between events and a projection I have to write a very similar code.
+When CQRS and Event Sourcing come in, you have to deal with projection tables or read models. Projection contains data prepared for a specific view. To process events we use so called denormalizers. Denormalizer is a hub that handle domain evens and map them to a projection. To define a mapping between events and a projection I have to write a very similar code.
 
 I think it's a kind of waste of time to do it again and again.
 
