@@ -60,9 +60,9 @@ Later I'm going to provide implementation for different event sourcing framework
 Here is an example:
 
 ```
-public class ConcertSeatsConfiguration : FluentProjectionConfiguration<ConcertSeats>
+public class ConcertSeatProjectionConfiguration : FluentProjectionConfiguration<ConcertSeatProjection>
 {
-    public ConcertSeatsConfiguration()
+    public ConcertSeatProjectionConfiguration()
     {
         ForEvent<CreateConcert>()
             .Translate(e => new[]
