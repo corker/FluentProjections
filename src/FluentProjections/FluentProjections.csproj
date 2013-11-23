@@ -37,9 +37,16 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventHandlers\Arguments\ArgumentsBuilderMapperExtensions.cs" />
-    <Compile Include="EventHandlers\Arguments\ArgumentsBuilderFilterExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\MapperArgumentsBuilderExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\ProjectionKey.cs" />
+    <Compile Include="EventHandlers\Arguments\ProjectionKeys.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\SaveArgumentsBuilderExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\UpdateArgumentsBuilderExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\IMapperArgumentsBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\ISaveArgumentsBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\IUpdateArgumentsBuilder.cs" />
     <Compile Include="EventHandlers\InsertFluentProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\SaveFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\TranslateFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\UpdateFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\EventHandlerConfigurer.cs" />
@@ -54,12 +61,14 @@
     <Compile Include="IFluentEventHandler.cs" />
     <Compile Include="EventHandlers\IEventHandlerConfigurer.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
-    <Compile Include="EventHandlers\Arguments\IEventMapperBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventHandlers\Arguments\ArgumentsBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\Builders\ArgumentsBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentProjections.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

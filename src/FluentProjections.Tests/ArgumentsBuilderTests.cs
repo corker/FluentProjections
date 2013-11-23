@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlers.Arguments.Builders;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests

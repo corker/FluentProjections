@@ -5,8 +5,8 @@ namespace FluentProjections.EventHandlers.Arguments
 {
     public class ProjectionFilter<TEvent>
     {
-        private readonly Func<TEvent, object> _getValue;
         private readonly PropertyInfo _property;
+        private readonly Func<TEvent, object> _getValue;
 
         public ProjectionFilter(PropertyInfo property, Func<TEvent, object> getValue)
         {

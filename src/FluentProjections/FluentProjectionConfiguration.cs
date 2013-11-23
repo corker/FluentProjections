@@ -3,7 +3,7 @@ using FluentProjections.EventHandlers;
 
 namespace FluentProjections
 {
-    public abstract class FluentProjectionConfiguration<TProjection> where TProjection : new()
+    public abstract class FluentProjectionConfiguration<TProjection> where TProjection : class, new()
     {
         private readonly List<IEventHandlerConfigurer> _configurers;
 

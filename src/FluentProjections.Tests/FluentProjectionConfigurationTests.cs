@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlers.Arguments.Builders;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests
@@ -10,11 +11,13 @@ namespace FluentProjections.Tests
         private class TestEvent
         {
             public int ValueInt32 { get; set; }
+            public long ValueInt64 { get; set; }
         }
 
         private class TestProjection
         {
             public int ValueInt32 { get; set; }
+            public long ValueInt64 { get; set; }
         }
 
         private class TestRegisterer : IFluentEventHandlerRegisterer
@@ -65,7 +68,7 @@ namespace FluentProjections.Tests
                 public TestConfiguration()
                 {
                     ForEvent<TestEvent>()
-                        .AddNew()
+                        .Insert()
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
             }
@@ -173,6 +176,156 @@ namespace FluentProjections.Tests
         }
 
         [TestFixture]
+        public class When_event_save_existing_projection
+        {
+            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            {
+                public TestConfiguration()
+                {
+                    ForEvent<TestEvent>()
+                        .Save()
+                        .WithKey(p => p.ValueInt32, e => e.ValueInt32)
+                        .Map(p => p.ValueInt64, e => e.ValueInt64);
+                }
+            }
+
+            private TestStore _targetStore;
+            private TestRegisterer _targetRegisterer;
+            private TestProjection _targetProjection;
+
+            [TestFixtureSetUp]
+            public void Init()
+            {
+                _targetRegisterer = new TestRegisterer();
+                _targetProjection = new TestProjection();
+
+                new TestConfiguration().RegisterBy(_targetRegisterer);
+
+                _targetStore = new TestStore(_targetProjection);
+
+                var @event = new TestEvent
+                {
+                    ValueInt32 = 777,
+                    ValueInt64 = 888
+                };
+
+                _targetRegisterer.Handler.Handle(@event, _targetStore);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info()
+            {
+                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                Assert.AreEqual("ValueInt32", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value()
+            {
+                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                Assert.AreEqual(777, value.Value);
+            }
+
+            [Test]
+            public void Should_read_from_store()
+            {
+                Assert.AreSame(_targetProjection, _targetStore.ReadProjection);
+            }
+
+            [Test]
+            public void Should_keep_key_the_same()
+            {
+                Assert.AreEqual(0, _targetStore.UpdateProjection.ValueInt32);
+            }
+
+            [Test]
+            public void Should_update_with_new_values()
+            {
+                Assert.AreEqual(888, _targetStore.UpdateProjection.ValueInt64);
+            }
+
+            [Test]
+            public void Should_update_with_the_same_projection()
+            {
+                Assert.AreSame(_targetProjection, _targetStore.UpdateProjection);
+            }
+        }
+
+        [TestFixture]
+        public class When_event_save_new_projection
+        {
+            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            {
+                public TestConfiguration()
+                {
+                    ForEvent<TestEvent>()
+                        .Save()
+                        .WithKey(p => p.ValueInt32, e => e.ValueInt32)
+                        .Map(p => p.ValueInt64, e => e.ValueInt64);
+                }
+            }
+
+            private TestStore _targetStore;
+            private TestRegisterer _targetRegisterer;
+
+            [TestFixtureSetUp]
+            public void Init()
+            {
+                _targetRegisterer = new TestRegisterer();
+
+                new TestConfiguration().RegisterBy(_targetRegisterer);
+
+                _targetStore = new TestStore(null);
+
+                var @event = new TestEvent
+                {
+                    ValueInt32 = 777,
+                    ValueInt64 = 888
+                };
+
+                _targetRegisterer.Handler.Handle(@event, _targetStore);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info()
+            {
+                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                Assert.AreEqual("ValueInt32", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value()
+            {
+                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                Assert.AreEqual(777, value.Value);
+            }
+
+            [Test]
+            public void Should_read_from_store()
+            {
+                Assert.IsNull(_targetStore.ReadProjection);
+            }
+
+            [Test]
+            public void Should_add_new_projection()
+            {
+                Assert.AreEqual(1, _targetStore.InsertProjections.Count);
+            }
+
+            [Test]
+            public void Should_map_keys()
+            {
+                Assert.AreEqual(777, _targetStore.InsertProjections.Single().ValueInt32);
+            }
+
+            [Test]
+            public void Should_map_values()
+            {
+                Assert.AreEqual(888, _targetStore.InsertProjections.Single().ValueInt64);
+            }
+        }
+
+        [TestFixture]
         public class When_event_translated
         {
             private class TestTranslatedEvent
@@ -196,7 +349,7 @@ namespace FluentProjections.Tests
                                 TranslatedValue = e.ValueInt32 + 1
                             }
                         })
-                        .AddNew()
+                        .Insert()
                         .Map(p => p.ValueInt32, e => e.TranslatedValue);
                 }
             }
