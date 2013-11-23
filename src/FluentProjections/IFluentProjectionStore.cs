@@ -2,10 +2,10 @@
 
 namespace FluentProjections
 {
-    public interface IFluentProjectionStore<TProjection>
+    public interface IFluentProjectionStore
     {
-        IEnumerable<TProjection> Read(FluentProjectionFilterValues values);
-        void Update(TProjection projection);
-        void Insert(TProjection projection);
+        IEnumerable<TProjection> Read<TProjection>(FluentProjectionFilterValues values);
+        void Update<TProjection>(TProjection projection);
+        void Insert<TProjection>(TProjection projection);
     }
 }

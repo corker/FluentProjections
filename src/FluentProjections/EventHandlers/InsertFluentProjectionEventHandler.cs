@@ -2,7 +2,7 @@
 
 namespace FluentProjections.EventHandlers
 {
-    public class InsertFluentProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent, TProjection>
+    public class InsertFluentProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
         where TProjection : new()
     {
         private readonly EventMappers<TEvent, TProjection> _mappers;
@@ -12,7 +12,7 @@ namespace FluentProjections.EventHandlers
             _mappers = mappers;
         }
 
-        public void Handle(TEvent @event, IFluentProjectionStore<TProjection> store)
+        public void Handle(TEvent @event, IFluentProjectionStore store)
         {
             var projection = new TProjection();
             _mappers.Map(@event, projection);

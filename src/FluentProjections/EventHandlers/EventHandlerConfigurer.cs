@@ -8,7 +8,7 @@ namespace FluentProjections.EventHandlers
         where TProjection : new()
     {
         private readonly ArgumentsBuilder<TEvent, TProjection> _argumentsBuilder;
-        private Func<IFluentEventHandler<TEvent, TProjection>> _configure;
+        private Func<IFluentEventHandler<TEvent>> _configure;
 
         public EventHandlerConfigurer()
         {
@@ -17,7 +17,7 @@ namespace FluentProjections.EventHandlers
 
         public void RegisterBy(IFluentEventHandlerRegisterer registerer)
         {
-            IFluentEventHandler<TEvent, TProjection> handler = _configure();
+            IFluentEventHandler<TEvent> handler = _configure();
             registerer.Register(handler);
         }
 
@@ -27,7 +27,7 @@ namespace FluentProjections.EventHandlers
             return _argumentsBuilder;
         }
 
-        private IFluentEventHandler<TEvent, TProjection> ConfigureInsertEventHandler()
+        private IFluentEventHandler<TEvent> ConfigureInsertEventHandler()
         {
             EventMappers<TEvent, TProjection> mappers = _argumentsBuilder.BuildMappers();
             return new InsertFluentProjectionEventHandler<TEvent, TProjection>(mappers);
@@ -39,7 +39,7 @@ namespace FluentProjections.EventHandlers
             return _argumentsBuilder;
         }
 
-        private IFluentEventHandler<TEvent, TProjection> ConfigureUpdateEventHandler()
+        private IFluentEventHandler<TEvent> ConfigureUpdateEventHandler()
         {
             EventMappers<TEvent, TProjection> mappers = _argumentsBuilder.BuildMappers();
             FluentProjectionFilters<TEvent> filters = _argumentsBuilder.BuildFilters();
@@ -53,12 +53,12 @@ namespace FluentProjections.EventHandlers
             return configurer;
         }
 
-        private static IFluentEventHandler<TEvent, TProjection> ConfigureTranslateEventHandler<TR>(
-            Func<TEvent, IEnumerable<TR>> translate,
-            EventHandlerConfigurer<TR, TProjection> configurer)
+        private static IFluentEventHandler<TEvent> ConfigureTranslateEventHandler<TTranslatedEvent>(
+            Func<TEvent, IEnumerable<TTranslatedEvent>> translate,
+            EventHandlerConfigurer<TTranslatedEvent, TProjection> configurer)
         {
-            IFluentEventHandler<TR, TProjection> translatedEventHandler = configurer._configure();
-            return new TranslateFluentProjectionEventHandler<TEvent, TProjection, TR>(translate, translatedEventHandler);
+            IFluentEventHandler<TTranslatedEvent> translatedEventHandler = configurer._configure();
+            return new TranslateFluentProjectionEventHandler<TEvent, TTranslatedEvent>(translate, translatedEventHandler);
         }
     }
 }

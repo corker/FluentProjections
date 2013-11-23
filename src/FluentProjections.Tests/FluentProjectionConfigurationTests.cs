@@ -18,15 +18,15 @@ namespace FluentProjections.Tests
 
         private class TestRegisterer : IFluentEventHandlerRegisterer
         {
-            public IFluentEventHandler<TestEvent, TestProjection> Handler { get; private set; }
+            public IFluentEventHandler<TestEvent> Handler { get; private set; }
 
-            public void Register<TEvent, TProjection>(IFluentEventHandler<TEvent, TProjection> eventHandler)
+            public void Register<TEvent>(IFluentEventHandler<TEvent> eventHandler)
             {
-                Handler = (IFluentEventHandler<TestEvent, TestProjection>) eventHandler;
+                Handler = (IFluentEventHandler<TestEvent>) eventHandler;
             }
         }
 
-        private class TestStore : IFluentProjectionStore<TestProjection>
+        private class TestStore : IFluentProjectionStore
         {
             public TestStore(TestProjection readProjection)
             {
@@ -38,21 +38,21 @@ namespace FluentProjections.Tests
             public TestProjection UpdateProjection { get; private set; }
             public List<TestProjection> InsertProjections { get; private set; }
 
-            public IEnumerable<TestProjection> Read(FluentProjectionFilterValues values)
+            public IEnumerable<TProjection> Read<TProjection>(FluentProjectionFilterValues values)
             {
                 FilterValues = values;
-                return new[] {ReadProjection};
+                return new[] {ReadProjection}.OfType<TProjection>();
             }
 
-            public void Update(TestProjection projection)
+            public void Update<TProjection>(TProjection projection)
             {
-                UpdateProjection = projection;
+                UpdateProjection = projection as TestProjection;
             }
 
-            public void Insert(TestProjection projection)
+            public void Insert<TProjection>(TProjection projection)
             {
                 InsertProjections = InsertProjections ?? new List<TestProjection>();
-                InsertProjections.Add(projection);
+                InsertProjections.Add(projection as TestProjection);
             }
         }
 

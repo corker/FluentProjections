@@ -1,7 +1,7 @@
 namespace FluentProjections
 {
-    public interface IFluentEventHandler<in TEvent, TProjection>
+    public interface IFluentEventHandler<in TEvent>
     {
-        void Handle(TEvent @event, IFluentProjectionStore<TProjection> store);
+        void Handle(TEvent @event, IFluentProjectionStore store);
     }
 }
