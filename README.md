@@ -60,24 +60,36 @@ Later I'm going to provide implementation for different event sourcing framework
 Here is an example:
 
 ```
-public class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+public class ConcertSeatsConfiguration : FluentProjectionConfiguration<ConcertSeats>
 {
-    public TestConfiguration()
+    public ConcertSeatsConfiguration()
     {
-        ForEvent<TestEvent>()
+        ForEvent<CreateConcert>()
             .Translate(e => new[]
             {
-                new TestTranslatedEvent { ... },
-                new TestTranslatedEvent { ... }
+                new DefineSeat { ... },
+                new DefineSeat { ... }
             })
-            .AddNew()
-            .Map(p => p.Id, e => e.Id)
-            .Map(p => p.Name, e => e.Name);
+            .Insert()
+            .Map(p => p.Id, e => e.SeatId)
+            .Map(p => p.Location);
             
-        ForEvent<TestEvent>()
+        ForEvent<CorrectSeatLocation>()
             .Update()
             .FilterBy(p => p.Id, e => e.Id)
-            .Map(p => p.Name, e => e.Name);
+            .Map(p => p.Location);
+    }
+}
+
+public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthStatistics>
+{
+    public MonthStatisticsConfiguration()
+    {
+        ForEvent<CreateConcert>()
+            .Save()
+            .Key(p => p.Year, e => e.Date.Year)
+            .Key(p => p.Month, e => e.Date.Month)
+            .Increment(p => p.Concerts);
     }
 }
 ```
