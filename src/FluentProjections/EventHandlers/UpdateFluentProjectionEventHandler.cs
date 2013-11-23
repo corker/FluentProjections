@@ -5,10 +5,10 @@ namespace FluentProjections.EventHandlers
 {
     public class UpdateFluentProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
     {
-        private readonly FluentProjectionFilters<TEvent> _filters;
+        private readonly ProjectionFilters<TEvent> _filters;
         private readonly EventMappers<TEvent, TProjection> _mappers;
 
-        public UpdateFluentProjectionEventHandler(FluentProjectionFilters<TEvent> filters,
+        public UpdateFluentProjectionEventHandler(ProjectionFilters<TEvent> filters,
             EventMappers<TEvent, TProjection> mappers)
         {
             _filters = filters;

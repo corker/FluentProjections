@@ -3,12 +3,12 @@ using System.Reflection;
 
 namespace FluentProjections.EventHandlers.Arguments
 {
-    public class FluentProjectionFilter<TEvent>
+    public class ProjectionFilter<TEvent>
     {
         private readonly Func<TEvent, object> _getValue;
         private readonly PropertyInfo _property;
 
-        public FluentProjectionFilter(PropertyInfo property, Func<TEvent, object> getValue)
+        public ProjectionFilter(PropertyInfo property, Func<TEvent, object> getValue)
         {
             _property = property;
             _getValue = getValue;

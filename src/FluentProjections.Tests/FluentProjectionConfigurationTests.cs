@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentProjections.EventHandlers.Arguments;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests

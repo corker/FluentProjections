@@ -42,7 +42,7 @@ namespace FluentProjections.EventHandlers
         private IFluentEventHandler<TEvent> ConfigureUpdateEventHandler()
         {
             EventMappers<TEvent, TProjection> mappers = _argumentsBuilder.BuildMappers();
-            FluentProjectionFilters<TEvent> filters = _argumentsBuilder.BuildFilters();
+            ProjectionFilters<TEvent> filters = _argumentsBuilder.BuildFilters();
             return new UpdateFluentProjectionEventHandler<TEvent, TProjection>(filters, mappers);
         }
 

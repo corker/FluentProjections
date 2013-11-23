@@ -37,13 +37,15 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EventHandlers\Arguments\ArgumentsBuilderMapperExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\ArgumentsBuilderFilterExtensions.cs" />
     <Compile Include="EventHandlers\InsertFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\TranslateFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\UpdateFluentProjectionEventHandler.cs" />
     <Compile Include="EventHandlers\EventHandlerConfigurer.cs" />
     <Compile Include="FluentProjectionConfiguration.cs" />
-    <Compile Include="EventHandlers\Arguments\FluentProjectionFilter.cs" />
-    <Compile Include="EventHandlers\Arguments\FluentProjectionFilters.cs" />
+    <Compile Include="EventHandlers\Arguments\ProjectionFilter.cs" />
+    <Compile Include="EventHandlers\Arguments\ProjectionFilters.cs" />
     <Compile Include="FluentProjectionFilterValue.cs" />
     <Compile Include="FluentProjectionFilterValues.cs" />
     <Compile Include="EventHandlers\Arguments\EventMapper.cs" />

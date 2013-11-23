@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace FluentProjections.EventHandlers.Arguments
 {
-    public class FluentProjectionFilters<TEvent>
+    public class ProjectionFilters<TEvent>
     {
-        private readonly List<FluentProjectionFilter<TEvent>> _filters;
+        private readonly List<ProjectionFilter<TEvent>> _filters;
 
-        public FluentProjectionFilters(List<FluentProjectionFilter<TEvent>> filters)
+        public ProjectionFilters(List<ProjectionFilter<TEvent>> filters)
         {
             _filters = filters;
         }
