@@ -122,10 +122,15 @@ What’s new?
 
 **Nov 24th, 2013**      
 A codebase reorganized the way you need to reference the only root namespace.
+
 Save method introduced - see configuration examples above.
+
 AddNew method renamed to Insert so as it's more explicit.
+
 All methods like Insert, Update, Save, Translate are implemented as extensions - it's possible to have custom methods now.
+
 All methods like Map, FilterBy, Key are implemented as extensions - it's possible to have custom methods now.
+
 
 **Nov 17th, 2013**      
 A single event can be translated into a series of objects. Translated objects can be handled the same way as other events.
