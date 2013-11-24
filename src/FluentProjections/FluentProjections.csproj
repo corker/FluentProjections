@@ -60,7 +60,7 @@
     <Compile Include="EventHandlers\Arguments\Mapper.cs" />
     <Compile Include="EventHandlers\Arguments\Mappers.cs" />
     <Compile Include="IFluentProjectionStore.cs" />
-    <Compile Include="EventHandlers\IFluentEventHandler.cs" />
+    <Compile Include="IFluentEventHandler.cs" />
     <Compile Include="EventHandlers\IFluentEventHandlerProvider.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
