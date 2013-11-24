@@ -1,17 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FluentProjections.EventHandlers.Arguments;
 
 namespace FluentProjections.EventHandlers
 {
-    public class SaveFluentProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
+    public class SaveProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
         where TProjection : class, new()
     {
-        private readonly ProjectionKeys<TEvent, TProjection> _keys;
-        private readonly EventMappers<TEvent, TProjection> _mappers;
+        private readonly Keys<TEvent, TProjection> _keys;
+        private readonly Mappers<TEvent, TProjection> _mappers;
 
-        public SaveFluentProjectionEventHandler(
-            ProjectionKeys<TEvent, TProjection> keys,
-            EventMappers<TEvent, TProjection> mappers)
+        public SaveProjectionEventHandler(
+            Keys<TEvent, TProjection> keys,
+            Mappers<TEvent, TProjection> mappers)
         {
             _mappers = mappers;
             _keys = keys;
@@ -19,7 +20,7 @@ namespace FluentProjections.EventHandlers
 
         public void Handle(TEvent @event, IFluentProjectionStore store)
         {
-            FluentProjectionFilterValues filterValues = _keys.GetValues(@event);
+            IEnumerable<FluentProjectionFilterValue> filterValues = _keys.GetValues(@event);
             TProjection projection = store.Read<TProjection>(filterValues).SingleOrDefault();
             if (projection == null)
             {

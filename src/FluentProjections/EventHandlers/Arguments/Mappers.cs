@@ -2,11 +2,11 @@
 
 namespace FluentProjections.EventHandlers.Arguments
 {
-    public class EventMappers<TEvent, TProjection>
+    public class Mappers<TEvent, TProjection>
     {
-        private readonly IEnumerable<EventMapper<TEvent, TProjection>> _mappers;
+        private readonly IEnumerable<Mapper<TEvent, TProjection>> _mappers;
 
-        public EventMappers(IEnumerable<EventMapper<TEvent, TProjection>> mappers)
+        public Mappers(IEnumerable<Mapper<TEvent, TProjection>> mappers)
         {
             _mappers = mappers;
         }

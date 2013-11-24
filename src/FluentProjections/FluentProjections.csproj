@@ -37,32 +37,34 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventHandlers\Arguments\Builders\MapperArgumentsBuilderExtensions.cs" />
-    <Compile Include="EventHandlers\Arguments\ProjectionKey.cs" />
-    <Compile Include="EventHandlers\Arguments\ProjectionKeys.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\SaveArgumentsBuilderExtensions.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\UpdateArgumentsBuilderExtensions.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\IMapperArgumentsBuilder.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\ISaveArgumentsBuilder.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\IUpdateArgumentsBuilder.cs" />
-    <Compile Include="EventHandlers\InsertFluentProjectionEventHandler.cs" />
-    <Compile Include="EventHandlers\SaveFluentProjectionEventHandler.cs" />
-    <Compile Include="EventHandlers\TranslateFluentProjectionEventHandler.cs" />
-    <Compile Include="EventHandlers\UpdateFluentProjectionEventHandler.cs" />
-    <Compile Include="EventHandlers\EventHandlerConfigurer.cs" />
+    <Compile Include="MapperExtensions.cs" />
+    <Compile Include="EventExtensions.cs" />
+    <Compile Include="EventHandlers\SaveProjectionEventHandlerArguments.cs" />
+    <Compile Include="EventHandlers\UpdateProjectionEventHandlerArguments.cs" />
+    <Compile Include="EventHandlers\Arguments\Key.cs" />
+    <Compile Include="EventHandlers\Arguments\Keys.cs" />
+    <Compile Include="KeyExtensions.cs" />
+    <Compile Include="FilterExtensions.cs" />
+    <Compile Include="EventHandlers\Arguments\IMappersBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\IKeysBuilder.cs" />
+    <Compile Include="EventHandlers\Arguments\IFiltersBuilder.cs" />
+    <Compile Include="EventHandlers\InsertProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\SaveProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\TranslateEventHandler.cs" />
+    <Compile Include="EventHandlers\UpdateProjectionEventHandler.cs" />
+    <Compile Include="EventHandlers\FluentEventHandlerProvider.cs" />
     <Compile Include="FluentProjectionConfiguration.cs" />
-    <Compile Include="EventHandlers\Arguments\ProjectionFilter.cs" />
-    <Compile Include="EventHandlers\Arguments\ProjectionFilters.cs" />
+    <Compile Include="EventHandlers\Arguments\Filter.cs" />
+    <Compile Include="EventHandlers\Arguments\Filters.cs" />
     <Compile Include="FluentProjectionFilterValue.cs" />
-    <Compile Include="FluentProjectionFilterValues.cs" />
-    <Compile Include="EventHandlers\Arguments\EventMapper.cs" />
-    <Compile Include="EventHandlers\Arguments\EventMappers.cs" />
+    <Compile Include="EventHandlers\Arguments\Mapper.cs" />
+    <Compile Include="EventHandlers\Arguments\Mappers.cs" />
     <Compile Include="IFluentProjectionStore.cs" />
-    <Compile Include="IFluentEventHandler.cs" />
-    <Compile Include="EventHandlers\IEventHandlerConfigurer.cs" />
+    <Compile Include="EventHandlers\IFluentEventHandler.cs" />
+    <Compile Include="EventHandlers\IFluentEventHandlerProvider.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventHandlers\Arguments\Builders\ArgumentsBuilder.cs" />
+    <Compile Include="EventHandlers\InsertProjectionEventHandlerArguments.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentProjections.nuspec" />

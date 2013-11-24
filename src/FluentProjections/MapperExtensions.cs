@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using FluentProjections.EventHandlers.Arguments;
 
-namespace FluentProjections.EventHandlers.Arguments.Builders
+namespace FluentProjections
 {
-    public static class MapperArgumentsBuilderExtensions
+    public static class MapperExtensions
     {
         /// <summary>
         /// Do an <param name="action"></param> with <typeparam name="TProjection"></typeparam> using <typeparam name="TEvent"></typeparam>
@@ -14,11 +15,11 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="action">An action to perform on projection</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Do<TEvent, TProjection>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Do<TEvent, TProjection>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Action<TEvent, TProjection> action)
         {
-            source.AddMapper(new EventMapper<TEvent, TProjection>(action));
+            source.AddMapper(new Mapper<TEvent, TProjection>(action));
             return source;
         }
 
@@ -32,8 +33,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
@@ -49,8 +50,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
         {
             PropertyInfo propertyInfo = GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
@@ -67,8 +68,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
         {
@@ -84,8 +85,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
             where TValue : IComparable<TValue>
         {
@@ -101,8 +102,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Increment<TEvent, TProjection>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Increment<TEvent, TProjection>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, long>> projectionProperty)
         {
             return source.Add(projectionProperty, e => 1);
@@ -118,8 +119,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
         {
@@ -135,8 +136,8 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
             where TValue : IComparable<TValue>
         {
@@ -152,15 +153,15 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMapperArgumentsBuilder<TEvent, TProjection> Decrement<TEvent, TProjection>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        public static IMappersBuilder<TEvent, TProjection> Decrement<TEvent, TProjection>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, long>> projectionProperty)
         {
             return source.Substract(projectionProperty, e => 1);
         }
 
-        private static IMapperArgumentsBuilder<TEvent, TProjection> Do<TEvent, TProjection, TValue>(
-            this IMapperArgumentsBuilder<TEvent, TProjection> source,
+        private static IMappersBuilder<TEvent, TProjection> Do<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
             Action<TProjection, TValue> action,
             Func<TEvent, TValue> getValue)
         {

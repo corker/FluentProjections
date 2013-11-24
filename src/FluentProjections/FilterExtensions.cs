@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using FluentProjections.EventHandlers.Arguments;
 
-namespace FluentProjections.EventHandlers.Arguments.Builders
+namespace FluentProjections
 {
-    public static class UpdateArgumentsBuilderExtensions
+    public static class FilterExtensions
     {
         /// <summary>
         /// Update projections that match a key.
@@ -16,14 +17,14 @@ namespace FluentProjections.EventHandlers.Arguments.Builders
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting filter</returns>
-        public static IUpdateArgumentsBuilder<TEvent, TProjection> FilterBy<TEvent, TProjection, TValue>(
-            this IUpdateArgumentsBuilder<TEvent, TProjection> source,
+        public static IFiltersBuilder<TEvent, TProjection> FilterBy<TEvent, TProjection, TValue>(
+            this IFiltersBuilder<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
             var memberExpression = (MemberExpression)projectionProperty.Body;
             var property = (PropertyInfo)memberExpression.Member;
-            source.AddFilter(new ProjectionFilter<TEvent>(property, e => getValue(e)));
+            source.AddFilter(new Filter<TEvent>(property, e => getValue(e)));
             return source;
         }
     }

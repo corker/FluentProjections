@@ -1,4 +1,4 @@
-namespace FluentProjections
+namespace FluentProjections.EventHandlers
 {
     public interface IFluentEventHandler<in TEvent>
     {

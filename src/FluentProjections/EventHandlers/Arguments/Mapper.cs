@@ -2,11 +2,11 @@
 
 namespace FluentProjections.EventHandlers.Arguments
 {
-    public class EventMapper<TEvent, TProjection>
+    public class Mapper<TEvent, TProjection>
     {
         private readonly Action<TEvent, TProjection> _action;
 
-        public EventMapper(Action<TEvent, TProjection> action)
+        public Mapper(Action<TEvent, TProjection> action)
         {
             _action = action;
         }

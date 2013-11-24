@@ -1,6 +1,6 @@
 ﻿namespace FluentProjections.EventHandlers
 {
-    public interface IEventHandlerConfigurer
+    public interface IFluentEventHandlerProvider
     {
         void RegisterBy(IFluentEventHandlerRegisterer registerer);
     }

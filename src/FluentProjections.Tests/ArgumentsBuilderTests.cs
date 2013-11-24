@@ -1,6 +1,6 @@
 ﻿using System;
+using FluentProjections.EventHandlers;
 using FluentProjections.EventHandlers.Arguments;
-using FluentProjections.EventHandlers.Arguments.Builders;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests
@@ -29,11 +29,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Add(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(10, projection.ProjectionProperty);
@@ -45,11 +45,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 10};
                 var projection = new TestProjection {MappedByName = 10};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Add(p => p.MappedByName);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(20, projection.MappedByName);
@@ -61,11 +61,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent();
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Decrement(p => p.ProjectionProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(4, projection.ProjectionProperty);
@@ -77,11 +77,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Do((e, p) => p.ProjectionProperty = p.ProjectionProperty*e.EventProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(25, projection.ProjectionProperty);
@@ -93,11 +93,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent();
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Increment(p => p.ProjectionProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(6, projection.ProjectionProperty);
@@ -109,11 +109,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 777};
                 var projection = new TestProjection();
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Map(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(@event.EventProperty, projection.ProjectionProperty);
@@ -125,11 +125,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 555};
                 var projection = new TestProjection();
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Map(p => p.MappedByName);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(@event.MappedByName, projection.MappedByName);
@@ -141,11 +141,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 15};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Substract(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(10, projection.ProjectionProperty);
@@ -157,11 +157,11 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 5};
                 var projection = new TestProjection {MappedByName = 15};
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
                 builder.Substract(p => p.MappedByName);
 
                 // Act
-                builder.BuildMappers().Map(@event, projection);
+                builder.Mappers.Map(@event, projection);
 
                 // Assert
                 Assert.AreEqual(10, projection.MappedByName);
@@ -171,7 +171,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_add()
             {
                 // Arrange
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Add(p => p.NoEventProperty));
@@ -184,7 +184,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_mapping()
             {
                 // Arrange
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Map(p => p.NoEventProperty));
@@ -197,7 +197,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_substract()
             {
                 // Arrange
-                var builder = new ArgumentsBuilder<TestEvent, TestProjection>();
+                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Substract(p => p.NoEventProperty));

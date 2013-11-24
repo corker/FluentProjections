@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace FluentProjections.EventHandlers
 {
-    public class TranslateFluentProjectionEventHandler<TEvent, TTranslatedEvent> : IFluentEventHandler<TEvent>
+    public class TranslateEventHandler<TEvent, TTranslatedEvent> : IFluentEventHandler<TEvent>
     {
         private readonly Func<TEvent, IEnumerable<TTranslatedEvent>> _translate;
         private readonly IFluentEventHandler<TTranslatedEvent> _translatedEventHandler;
 
-        public TranslateFluentProjectionEventHandler(Func<TEvent, IEnumerable<TTranslatedEvent>> translate,
+        public TranslateEventHandler(Func<TEvent, IEnumerable<TTranslatedEvent>> translate,
             IFluentEventHandler<TTranslatedEvent> translatedEventHandler)
         {
             _translate = translate;

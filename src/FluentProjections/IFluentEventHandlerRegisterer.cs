@@ -1,4 +1,6 @@
-﻿namespace FluentProjections
+﻿using FluentProjections.EventHandlers;
+
+namespace FluentProjections
 {
     public interface IFluentEventHandlerRegisterer
     {
