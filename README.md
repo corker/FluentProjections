@@ -126,6 +126,7 @@ What’s new?
 - AddNew method renamed to Insert so as it's more explicit.
 - All methods like Insert, Update, Save, Translate are implemented as extensions - it's possible to have custom methods now.
 - All methods like Map, FilterBy, Key are implemented as extensions - it's possible to have custom methods now.
+- Class constraint added to TProjection in IFluentProjectionStore.
 
 **Nov 17th, 2013**      
 - A single event can be translated into a series of objects. Translated objects can be handled the same way as other events.
