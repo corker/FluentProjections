@@ -77,7 +77,7 @@ public class ConcertSeatProjectionConfiguration : FluentProjectionConfiguration<
                 .Map(projection => projection.Location, seat.SeatLocation);
             
         ForEvent<SeatLocationCorrected>()
-            // update all projections that match provided filter(s) in a store
+            // update all projections that matches provided filter(s) in a store
             .Update()
                 .FilterBy(projection => projection.Id, @event => @event.Id)
                 .Map(projection => projection.Location);
