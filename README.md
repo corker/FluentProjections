@@ -36,25 +36,7 @@ To be able to use FluentProjections you need to do the following steps.
 Install-Package FluentProjections
 ```
 
-2. Implement IFluentProjectionStore<TProjection>
---
-
-IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
-
-Later I'm going to provide implementation for different database types, but right now it's not there.
-
-3. Implement IFluentEventHandlerRegisterer
---
-
-IFluentEventHandlerRegisterer is a bridge between FluentProjections and your event bus. I don't know what event bus you use, so it's up to you how to register handlers in your code.
-
-E.g. NServiceBus uses IHandleMessages<TMessage> interface. I can imagine that you write a generic event handler class that implements IHandleMessages<TMessage> interface and get IFluentEventHandler as an argument in a constructor.
-
-In this case implementation for registerer should create that generic event handler, initialize it with fluent event handler and register generic event handler in your IoC container.
-
-Later I'm going to provide implementation for different event sourcing frameworks, but right now it's not there.
-
-4. Implement your projection configurations
+2. Implement your projection configurations
 --
 
 Here is an example:
@@ -97,6 +79,24 @@ public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthS
     }
 }
 ```
+
+3. Implement IFluentProjectionStore<TProjection>
+--
+
+IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
+
+Later I'm going to provide implementation for different database types, but right now it's not there.
+
+4. Implement IFluentEventHandlerRegisterer
+--
+
+IFluentEventHandlerRegisterer is a bridge between FluentProjections and your event bus. I don't know what event bus you use, so it's up to you how to register handlers in your code.
+
+E.g. NServiceBus uses IHandleMessages<TMessage> interface. I can imagine that you write a generic event handler class that implements IHandleMessages<TMessage> interface and get IFluentEventHandler as an argument in a constructor.
+
+In this case implementation for registerer should create that generic event handler, initialize it with fluent event handler and register generic event handler in your IoC container.
+
+Later I'm going to provide implementation for different event sourcing frameworks, but right now it's not there.
 
 5. Register your projection configurations
 --
