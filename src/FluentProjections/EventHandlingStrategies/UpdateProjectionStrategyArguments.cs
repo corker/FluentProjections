@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
-    public class UpdateProjectionEventHandlerArguments<TEvent, TProjection> : IFiltersBuilder<TEvent, TProjection>
+    public class UpdateProjectionStrategyArguments<TEvent, TProjection> : IFiltersBuilder<TEvent, TProjection>
     {
         private readonly List<Filter<TEvent>> _filters;
         private readonly List<Mapper<TEvent, TProjection>> _mappers;
 
-        public UpdateProjectionEventHandlerArguments()
+        public UpdateProjectionStrategyArguments()
         {
             _mappers = new List<Mapper<TEvent, TProjection>>();
             _filters = new List<Filter<TEvent>>();

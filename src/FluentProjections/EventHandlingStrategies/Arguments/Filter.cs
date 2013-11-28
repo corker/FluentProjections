@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace FluentProjections.EventHandlers.Arguments
+namespace FluentProjections.EventHandlingStrategies.Arguments
 {
     public class Filter<TEvent>
     {

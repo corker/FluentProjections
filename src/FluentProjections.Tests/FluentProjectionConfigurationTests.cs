@@ -20,11 +20,11 @@ namespace FluentProjections.Tests
 
         private class TestRegisterer : IFluentEventHandlerRegisterer
         {
-            public IFluentEventHandler<TestEvent> Handler { get; private set; }
+            public IFluentEventHandlingStrategy<TestEvent> HandlingStrategy { get; private set; }
 
-            public void Register<TEvent>(IFluentEventHandler<TEvent> eventHandler)
+            public void Register<TEvent>(IFluentEventHandlingStrategy<TEvent> fluentEventHandlingStrategy)
             {
-                Handler = (IFluentEventHandler<TestEvent>) eventHandler;
+                HandlingStrategy = (IFluentEventHandlingStrategy<TestEvent>) fluentEventHandlingStrategy;
             }
         }
 
@@ -88,7 +88,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.Handler.Handle(@event, _targetStore);
+                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
             }
 
             [Test]
@@ -138,7 +138,7 @@ namespace FluentProjections.Tests
                     ValueInt64 = 888
                 };
 
-                _targetRegisterer.Handler.Handle(@event, _targetStore);
+                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
             }
 
             [Test]
@@ -212,7 +212,7 @@ namespace FluentProjections.Tests
                     ValueInt64 = 888
                 };
 
-                _targetRegisterer.Handler.Handle(@event, _targetStore);
+                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
             }
 
             [Test]
@@ -300,7 +300,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.Handler.Handle(@event, _targetStore);
+                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
             }
 
             [Test]
@@ -350,7 +350,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.Handler.Handle(@event, _targetStore);
+                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
             }
 
             [Test]

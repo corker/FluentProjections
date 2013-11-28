@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using FluentProjections.EventHandlers;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections
 {
@@ -11,15 +11,15 @@ namespace FluentProjections
         ///     Insert a new projection.
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
-        public static InsertProjectionEventHandlerArguments<TEvent, TProjection> Insert<TEvent, TProjection>(
+        public static InsertProjectionStrategyArguments<TEvent, TProjection> Insert<TEvent, TProjection>(
             this FluentEventHandlerProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
-            var arguments = new InsertProjectionEventHandlerArguments<TEvent, TProjection>();
+            var arguments = new InsertProjectionStrategyArguments<TEvent, TProjection>();
             source.SetFactory(() =>
             {
                 Mappers<TEvent, TProjection> mappers = arguments.Mappers;
-                return (IFluentEventHandler<TEvent>) new InsertProjectionEventHandler<TEvent, TProjection>(mappers);
+                return (IFluentEventHandlingStrategy<TEvent>) new InsertProjectionStrategy<TEvent, TProjection>(mappers);
             });
             return arguments;
         }
@@ -28,16 +28,16 @@ namespace FluentProjections
         ///     Update all projections that match provided filters.
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
-        public static UpdateProjectionEventHandlerArguments<TEvent, TProjection> Update<TEvent, TProjection>(
+        public static UpdateProjectionStrategyArguments<TEvent, TProjection> Update<TEvent, TProjection>(
             this FluentEventHandlerProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
-            var arguments = new UpdateProjectionEventHandlerArguments<TEvent, TProjection>();
+            var arguments = new UpdateProjectionStrategyArguments<TEvent, TProjection>();
             source.SetFactory(() =>
             {
                 Mappers<TEvent, TProjection> mappers = arguments.Mappers;
                 Filters<TEvent> filters = arguments.Filters;
-                return (IFluentEventHandler<TEvent>) new UpdateProjectionEventHandler<TEvent, TProjection>(filters, mappers);
+                return (IFluentEventHandlingStrategy<TEvent>) new UpdateProjectionStrategy<TEvent, TProjection>(filters, mappers);
             });
             return arguments;
         }
@@ -46,16 +46,16 @@ namespace FluentProjections
         ///     Update a projection that matches provided keys or insert a new projection when one doesn't exist.
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
-        public static SaveProjectionEventHandlerArguments<TEvent, TProjection> Save<TEvent, TProjection>(
+        public static SaveProjectionStrategyArguments<TEvent, TProjection> Save<TEvent, TProjection>(
             this FluentEventHandlerProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
-            var arguments = new SaveProjectionEventHandlerArguments<TEvent, TProjection>();
+            var arguments = new SaveProjectionStrategyArguments<TEvent, TProjection>();
             source.SetFactory(() =>
             {
                 Mappers<TEvent, TProjection> mappers = arguments.Mappers;
                 Keys<TEvent, TProjection> keys = arguments.Keys;
-                return (IFluentEventHandler<TEvent>) new SaveProjectionEventHandler<TEvent, TProjection>(keys, mappers);
+                return (IFluentEventHandlingStrategy<TEvent>) new SaveProjectionStrategy<TEvent, TProjection>(keys, mappers);
             });
             return arguments;
         }
@@ -73,8 +73,8 @@ namespace FluentProjections
             var provider = new FluentEventHandlerProvider<TR, TProjection>();
             source.SetFactory(() =>
             {
-                IFluentEventHandler<TR> translatedEventHandler = provider.Create();
-                return (IFluentEventHandler<TEvent>) new TranslateEventHandler<TEvent, TR>(translate, translatedEventHandler);
+                IFluentEventHandlingStrategy<TR> strategy = provider.Create();
+                return (IFluentEventHandlingStrategy<TEvent>) new TranslateStrategy<TEvent, TR>(translate, strategy);
             });
             return provider;
         }

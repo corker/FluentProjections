@@ -1,13 +1,13 @@
-﻿using FluentProjections.EventHandlers.Arguments;
+﻿using FluentProjections.EventHandlingStrategies.Arguments;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
-    public class InsertProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
+    public class InsertProjectionStrategy<TEvent, TProjection> : IFluentEventHandlingStrategy<TEvent>
         where TProjection : class, new()
     {
         private readonly Mappers<TEvent, TProjection> _mappers;
 
-        public InsertProjectionEventHandler(Mappers<TEvent, TProjection> mappers)
+        public InsertProjectionStrategy(Mappers<TEvent, TProjection> mappers)
         {
             _mappers = mappers;
         }

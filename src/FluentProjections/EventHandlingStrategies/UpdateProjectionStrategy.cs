@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
-    public class UpdateProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
+    public class UpdateProjectionStrategy<TEvent, TProjection> : IFluentEventHandlingStrategy<TEvent>
         where TProjection : class
     {
         private readonly Filters<TEvent> _filters;
         private readonly Mappers<TEvent, TProjection> _mappers;
 
-        public UpdateProjectionEventHandler(Filters<TEvent> filters,
+        public UpdateProjectionStrategy(Filters<TEvent> filters,
             Mappers<TEvent, TProjection> mappers)
         {
             _filters = filters;

@@ -1,9 +1,7 @@
-﻿using FluentProjections.EventHandlers;
-
-namespace FluentProjections
+﻿namespace FluentProjections
 {
     public interface IFluentEventHandlerRegisterer
     {
-        void Register<TEvent>(IFluentEventHandler<TEvent> eventHandler);
+        void Register<TEvent>(IFluentEventHandlingStrategy<TEvent> fluentEventHandlingStrategy);
     }
 }

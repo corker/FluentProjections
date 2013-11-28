@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
-    public class InsertProjectionEventHandlerArguments<TEvent, TProjection> : IMappersBuilder<TEvent, TProjection>
+    public class InsertProjectionStrategyArguments<TEvent, TProjection> : IMappersBuilder<TEvent, TProjection>
     {
         private readonly List<Mapper<TEvent, TProjection>> _mappers;
 
-        public InsertProjectionEventHandlerArguments()
+        public InsertProjectionStrategyArguments()
         {
             _mappers = new List<Mapper<TEvent, TProjection>>();
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FluentProjections.EventHandlers.Arguments
+namespace FluentProjections.EventHandlingStrategies.Arguments
 {
     public class Mapper<TEvent, TProjection>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections
 {

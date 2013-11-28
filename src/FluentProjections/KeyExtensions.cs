@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections
 {

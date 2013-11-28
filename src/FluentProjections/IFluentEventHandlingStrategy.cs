@@ -1,6 +1,6 @@
 namespace FluentProjections
 {
-    public interface IFluentEventHandler<in TEvent>
+    public interface IFluentEventHandlingStrategy<in TEvent>
     {
         void Handle(TEvent @event, IFluentProjectionStore store);
     }

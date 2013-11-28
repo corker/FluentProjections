@@ -1,6 +1,5 @@
 ﻿using System;
-using FluentProjections.EventHandlers;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies;
 using NUnit.Framework;
 
 namespace FluentProjections.Tests
@@ -29,7 +28,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Add(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
@@ -45,7 +44,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 10};
                 var projection = new TestProjection {MappedByName = 10};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Add(p => p.MappedByName);
 
                 // Act
@@ -61,7 +60,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent();
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Decrement(p => p.ProjectionProperty);
 
                 // Act
@@ -77,7 +76,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Do((e, p) => p.ProjectionProperty = p.ProjectionProperty*e.EventProperty);
 
                 // Act
@@ -93,7 +92,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent();
                 var projection = new TestProjection {ProjectionProperty = 5};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Increment(p => p.ProjectionProperty);
 
                 // Act
@@ -109,7 +108,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 777};
                 var projection = new TestProjection();
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Map(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
@@ -125,7 +124,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 555};
                 var projection = new TestProjection();
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Map(p => p.MappedByName);
 
                 // Act
@@ -141,7 +140,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {EventProperty = 5};
                 var projection = new TestProjection {ProjectionProperty = 15};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Substract(p => p.ProjectionProperty, e => e.EventProperty);
 
                 // Act
@@ -157,7 +156,7 @@ namespace FluentProjections.Tests
                 // Arrange
                 var @event = new TestEvent {MappedByName = 5};
                 var projection = new TestProjection {MappedByName = 15};
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
                 builder.Substract(p => p.MappedByName);
 
                 // Act
@@ -171,7 +170,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_add()
             {
                 // Arrange
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Add(p => p.NoEventProperty));
@@ -184,7 +183,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_mapping()
             {
                 // Arrange
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Map(p => p.NoEventProperty));
@@ -197,7 +196,7 @@ namespace FluentProjections.Tests
             public void Should_throw_if_no_event_property_found_for_conventional_substract()
             {
                 // Arrange
-                var builder = new InsertProjectionEventHandlerArguments<TestEvent, TestProjection>();
+                var builder = new InsertProjectionStrategyArguments<TestEvent, TestProjection>();
 
                 // Act
                 var @delegate = new TestDelegate(() => builder.Substract(p => p.NoEventProperty));

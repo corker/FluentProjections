@@ -1,4 +1,4 @@
-﻿namespace FluentProjections.EventHandlers.Arguments
+﻿namespace FluentProjections.EventHandlingStrategies.Arguments
 {
     public interface IFiltersBuilder<TEvent, TProjection>: IMappersBuilder<TEvent, TProjection>
     {

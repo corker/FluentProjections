@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using FluentProjections.EventHandlers.Arguments;
+using FluentProjections.EventHandlingStrategies.Arguments;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
-    public class SaveProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
+    public class SaveProjectionStrategy<TEvent, TProjection> : IFluentEventHandlingStrategy<TEvent>
         where TProjection : class, new()
     {
         private readonly Keys<TEvent, TProjection> _keys;
         private readonly Mappers<TEvent, TProjection> _mappers;
 
-        public SaveProjectionEventHandler(
+        public SaveProjectionStrategy(
             Keys<TEvent, TProjection> keys,
             Mappers<TEvent, TProjection> mappers)
         {

@@ -1,4 +1,4 @@
-﻿namespace FluentProjections.EventHandlers
+﻿namespace FluentProjections.EventHandlingStrategies
 {
     public interface IFluentEventHandlerProvider
     {

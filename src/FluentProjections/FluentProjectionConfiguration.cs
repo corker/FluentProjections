@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using FluentProjections.EventHandlers;
+using FluentProjections.EventHandlingStrategies;
 
 namespace FluentProjections
 {

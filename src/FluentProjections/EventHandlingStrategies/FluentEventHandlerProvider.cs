@@ -1,23 +1,23 @@
 ﻿using System;
 
-namespace FluentProjections.EventHandlers
+namespace FluentProjections.EventHandlingStrategies
 {
     public class FluentEventHandlerProvider<TEvent, TProjection> : IFluentEventHandlerProvider
         where TProjection : class, new()
     {
-        private Func<IFluentEventHandler<TEvent>> _factory;
+        private Func<IFluentEventHandlingStrategy<TEvent>> _factory;
 
         void IFluentEventHandlerProvider.RegisterBy(IFluentEventHandlerRegisterer registerer)
         {
             registerer.Register(Create());
         }
 
-        public void SetFactory(Func<IFluentEventHandler<TEvent>> factory)
+        public void SetFactory(Func<IFluentEventHandlingStrategy<TEvent>> factory)
         {
             _factory = factory;
         }
 
-        public IFluentEventHandler<TEvent> Create()
+        public IFluentEventHandlingStrategy<TEvent> Create()
         {
             return _factory();
         }

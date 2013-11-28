@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace FluentProjections.EventHandlers.Arguments
+namespace FluentProjections.EventHandlingStrategies.Arguments
 {
     public class Mappers<TEvent, TProjection>
     {
