@@ -28,9 +28,7 @@ namespace FluentProjections
             return source;
         }
 
-        private class Q<TEvent, TProjection> : 
-            IMappersBuilder<TEvent, TProjection>,
-            IFiltersBuilder<TEvent, TProjection>
+        private class Q<TEvent, TProjection> : IFiltersBuilder<TEvent, TProjection>
 
         {
             public Mapper<TEvent, TProjection> Mapper { get; private set; }
