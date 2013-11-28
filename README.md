@@ -106,10 +106,10 @@ public class ApplicationBootstrap {
         var iocContainer = ...
         
         // create a registerer that register fluent event handlers in a container
-        _targetRegisterer = new TestRegisterer(iocContainer);
+        var registerer = new MyFluentEventHandlerRegisterer(iocContainer);
         
-        // register fluent event handlers that constructed configuration contains
-        new TestConfiguration().RegisterBy(_targetRegisterer);
+        // register fluent event handlers that constructed by a configuration
+        new MonthStatisticsConfiguration().RegisterBy(registerer);
         
         ...
     }
