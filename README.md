@@ -64,20 +64,23 @@ public class ConcertSeatProjectionConfiguration : FluentProjectionConfiguration<
 {
     public ConcertSeatProjectionConfiguration()
     {
-        ForEvent<CreateConcert>()
-            .Translate(e => new[]
+        ForEvent<ConcertCreated>()
+            // translate an event into a series of objects
+            .Translate(concert => new[]
             {
-                new DefineSeat { ... },
-                new DefineSeat { ... }
+                new DefineSeat { Id = concert.Seats.First().SeatId, ... },
+                new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
             })
+            // insert a projection with data mapped from a translated object into a store
             .Insert()
-            .Map(p => p.Id, e => e.SeatId)
-            .Map(p => p.Location);
+                .Map(projection => projection.Id)
+                .Map(projection => projection.Location, seat.SeatLocation);
             
-        ForEvent<CorrectSeatLocation>()
+        ForEvent<SeatLocationCorrected>()
+            // update all projections that match provided filter(s) in a store
             .Update()
-            .FilterBy(p => p.Id, e => e.Id)
-            .Map(p => p.Location);
+                .FilterBy(projection => projection.Id, @event => @event.Id)
+                .Map(projection => projection.Location);
     }
 }
 
@@ -85,11 +88,12 @@ public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthS
 {
     public MonthStatisticsConfiguration()
     {
-        ForEvent<CreateConcert>()
+        ForEvent<ConcertCreated>()
+            // update a projection that matches provided key(s) in a store or create a new one when not found
             .Save()
-            .Key(p => p.Year, e => e.Date.Year)
-            .Key(p => p.Month, e => e.Date.Month)
-            .Increment(p => p.Concerts);
+                .Key(p => p.Year, e => e.Date.Year)
+                .Key(p => p.Month, e => e.Date.Month)
+                .Increment(p => p.Concerts);
     }
 }
 ```
@@ -105,7 +109,10 @@ public class ApplicationBootstrap {
     public Bootstrap() {
         var iocContainer = ...
         
+        // create a registerer that register fluent event handlers in a container
         _targetRegisterer = new TestRegisterer(iocContainer);
+        
+        // register fluent event handlers that constructed configuration contains
         new TestConfiguration().RegisterBy(_targetRegisterer);
         
         ...
