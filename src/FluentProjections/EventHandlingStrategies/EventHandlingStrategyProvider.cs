@@ -2,12 +2,12 @@
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class FluentEventHandlerProvider<TEvent, TProjection> : IFluentEventHandlerProvider
+    public class EventHandlingStrategyProvider<TEvent, TProjection> : IEventHandlingStrategyProvider
         where TProjection : class, new()
     {
         private Func<IFluentEventHandlingStrategy<TEvent>> _factory;
 
-        void IFluentEventHandlerProvider.RegisterBy(IFluentEventHandlerRegisterer registerer)
+        void IEventHandlingStrategyProvider.RegisterBy(IFluentEventHandlerRegisterer registerer)
         {
             registerer.Register(Create());
         }

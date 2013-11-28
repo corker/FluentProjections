@@ -61,7 +61,7 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_add_new_projection
         {
-            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
             {
                 public TestConfiguration()
                 {
@@ -107,7 +107,7 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_save_existing_projection
         {
-            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
             {
                 public TestConfiguration()
                 {
@@ -183,7 +183,7 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_save_new_projection
         {
-            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
             {
                 public TestConfiguration()
                 {
@@ -262,7 +262,7 @@ namespace FluentProjections.Tests
                 public int TranslatedValue { get; set; }
             }
 
-            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
             {
                 public TestConfiguration()
                 {
@@ -320,7 +320,7 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_update_existing_projection
         {
-            private class TestConfiguration : FluentProjectionConfiguration<TestProjection>
+            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
             {
                 public TestConfiguration()
                 {

@@ -52,8 +52,8 @@
     <Compile Include="EventHandlingStrategies\SaveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\TranslateStrategy.cs" />
     <Compile Include="EventHandlingStrategies\UpdateProjectionStrategy.cs" />
-    <Compile Include="EventHandlingStrategies\FluentEventHandlerProvider.cs" />
-    <Compile Include="FluentProjectionConfiguration.cs" />
+    <Compile Include="EventHandlingStrategies\EventHandlingStrategyProvider.cs" />
+    <Compile Include="FluentEventDenormalizer.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Filter.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Filters.cs" />
     <Compile Include="FluentProjectionFilterValue.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="EventHandlingStrategies\Arguments\Mappers.cs" />
     <Compile Include="IFluentProjectionStore.cs" />
     <Compile Include="IFluentEventHandlingStrategy.cs" />
-    <Compile Include="EventHandlingStrategies\IFluentEventHandlerProvider.cs" />
+    <Compile Include="EventHandlingStrategies\IEventHandlingStrategyProvider.cs" />
     <Compile Include="IFluentEventHandlerRegisterer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventHandlingStrategies\InsertProjectionStrategyArguments.cs" />

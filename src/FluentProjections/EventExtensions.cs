@@ -12,7 +12,7 @@ namespace FluentProjections
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
         public static InsertProjectionStrategyArguments<TEvent, TProjection> Insert<TEvent, TProjection>(
-            this FluentEventHandlerProvider<TEvent, TProjection> source
+            this EventHandlingStrategyProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
             var arguments = new InsertProjectionStrategyArguments<TEvent, TProjection>();
@@ -29,7 +29,7 @@ namespace FluentProjections
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
         public static UpdateProjectionStrategyArguments<TEvent, TProjection> Update<TEvent, TProjection>(
-            this FluentEventHandlerProvider<TEvent, TProjection> source
+            this EventHandlingStrategyProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
             var arguments = new UpdateProjectionStrategyArguments<TEvent, TProjection>();
@@ -47,7 +47,7 @@ namespace FluentProjections
         /// </summary>
         /// <returns>An argument builder to configure a behavior.</returns>
         public static SaveProjectionStrategyArguments<TEvent, TProjection> Save<TEvent, TProjection>(
-            this FluentEventHandlerProvider<TEvent, TProjection> source
+            this EventHandlingStrategyProvider<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
             var arguments = new SaveProjectionStrategyArguments<TEvent, TProjection>();
@@ -65,12 +65,12 @@ namespace FluentProjections
         ///     event.
         /// </summary>
         /// <returns>A configurer for translated event.</returns>
-        public static FluentEventHandlerProvider<TR, TProjection> Translate<TEvent, TProjection, TR>(
-            this FluentEventHandlerProvider<TEvent, TProjection> source,
+        public static EventHandlingStrategyProvider<TR, TProjection> Translate<TEvent, TProjection, TR>(
+            this EventHandlingStrategyProvider<TEvent, TProjection> source,
             Func<TEvent, IEnumerable<TR>> translate
             ) where TProjection : class, new()
         {
-            var provider = new FluentEventHandlerProvider<TR, TProjection>();
+            var provider = new EventHandlingStrategyProvider<TR, TProjection>();
             source.SetFactory(() =>
             {
                 IFluentEventHandlingStrategy<TR> strategy = provider.Create();
