@@ -4,8 +4,8 @@ namespace FluentProjections
 {
     public interface IFluentProjectionStore
     {
-        IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values);
-        void Update<TProjection>(TProjection projection);
-        void Insert<TProjection>(TProjection projection);
+        IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection: class;
+        void Update<TProjection>(TProjection projection) where TProjection : class;
+        void Insert<TProjection>(TProjection projection) where TProjection : class;
     }
 }

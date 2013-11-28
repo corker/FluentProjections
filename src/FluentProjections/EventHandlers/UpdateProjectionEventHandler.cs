@@ -4,6 +4,7 @@ using FluentProjections.EventHandlers.Arguments;
 namespace FluentProjections.EventHandlers
 {
     public class UpdateProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
+        where TProjection : class
     {
         private readonly Filters<TEvent> _filters;
         private readonly Mappers<TEvent, TProjection> _mappers;

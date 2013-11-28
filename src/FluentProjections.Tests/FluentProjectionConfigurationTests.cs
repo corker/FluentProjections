@@ -40,18 +40,18 @@ namespace FluentProjections.Tests
             public TestProjection UpdateProjection { get; private set; }
             public List<TestProjection> InsertProjections { get; private set; }
 
-            public IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values)
+            public IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
             {
                 FilterValues = values;
                 return new[] {ReadProjection}.OfType<TProjection>();
             }
 
-            public void Update<TProjection>(TProjection projection)
+            public void Update<TProjection>(TProjection projection) where TProjection : class
             {
                 UpdateProjection = projection as TestProjection;
             }
 
-            public void Insert<TProjection>(TProjection projection)
+            public void Insert<TProjection>(TProjection projection) where TProjection : class
             {
                 InsertProjections = InsertProjections ?? new List<TestProjection>();
                 InsertProjections.Add(projection as TestProjection);

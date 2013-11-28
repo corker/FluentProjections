@@ -3,7 +3,7 @@
 namespace FluentProjections.EventHandlers
 {
     public class InsertProjectionEventHandler<TEvent, TProjection> : IFluentEventHandler<TEvent>
-        where TProjection : new()
+        where TProjection : class, new()
     {
         private readonly Mappers<TEvent, TProjection> _mappers;
 
