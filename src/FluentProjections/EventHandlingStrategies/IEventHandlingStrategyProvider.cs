@@ -2,6 +2,6 @@
 {
     public interface IEventHandlingStrategyProvider
     {
-        void RegisterBy(IFluentEventHandlerRegisterer registerer);
+        void RegisterBy(IFluentEventHandlingStrategyRegisterer registerer);
     }
 }

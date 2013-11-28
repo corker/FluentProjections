@@ -7,7 +7,7 @@ namespace FluentProjections.EventHandlingStrategies
     {
         private Func<IFluentEventHandlingStrategy<TEvent>> _factory;
 
-        void IEventHandlingStrategyProvider.RegisterBy(IFluentEventHandlerRegisterer registerer)
+        void IEventHandlingStrategyProvider.RegisterBy(IFluentEventHandlingStrategyRegisterer registerer)
         {
             registerer.Register(Create());
         }

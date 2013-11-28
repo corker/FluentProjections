@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace FluentProjections.Tests
 {
-    public class FluentProjectionConfigurationTests
+    public class FluentEventDenormalizerTests
     {
         private class TestEvent
         {
@@ -18,7 +18,7 @@ namespace FluentProjections.Tests
             public long ValueInt64 { get; set; }
         }
 
-        private class TestRegisterer : IFluentEventHandlerRegisterer
+        private class TestRegisterer : IFluentEventHandlingStrategyRegisterer
         {
             public IFluentEventHandlingStrategy<TestEvent> HandlingStrategy { get; private set; }
 
@@ -61,9 +61,9 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_add_new_projection
         {
-            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestConfiguration()
+                public TestDenormalizer()
                 {
                     ForEvent<TestEvent>()
                         .Insert()
@@ -79,7 +79,7 @@ namespace FluentProjections.Tests
             {
                 _targetRegisterer = new TestRegisterer();
 
-                new TestConfiguration().RegisterBy(_targetRegisterer);
+                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(null);
 
@@ -107,9 +107,9 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_save_existing_projection
         {
-            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestConfiguration()
+                public TestDenormalizer()
                 {
                     ForEvent<TestEvent>()
                         .Save()
@@ -128,7 +128,7 @@ namespace FluentProjections.Tests
                 _targetRegisterer = new TestRegisterer();
                 _targetProjection = new TestProjection();
 
-                new TestConfiguration().RegisterBy(_targetRegisterer);
+                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(_targetProjection);
 
@@ -183,9 +183,9 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_save_new_projection
         {
-            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestConfiguration()
+                public TestDenormalizer()
                 {
                     ForEvent<TestEvent>()
                         .Save()
@@ -202,7 +202,7 @@ namespace FluentProjections.Tests
             {
                 _targetRegisterer = new TestRegisterer();
 
-                new TestConfiguration().RegisterBy(_targetRegisterer);
+                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(null);
 
@@ -262,9 +262,9 @@ namespace FluentProjections.Tests
                 public int TranslatedValue { get; set; }
             }
 
-            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestConfiguration()
+                public TestDenormalizer()
                 {
                     ForEvent<TestEvent>()
                         .Translate(e => new[]
@@ -291,7 +291,7 @@ namespace FluentProjections.Tests
             {
                 _targetRegisterer = new TestRegisterer();
 
-                new TestConfiguration().RegisterBy(_targetRegisterer);
+                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(null);
 
@@ -320,9 +320,9 @@ namespace FluentProjections.Tests
         [TestFixture]
         public class When_event_update_existing_projection
         {
-            private class TestConfiguration : FluentEventDenormalizer<TestProjection>
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestConfiguration()
+                public TestDenormalizer()
                 {
                     ForEvent<TestEvent>()
                         .Update()
@@ -341,7 +341,7 @@ namespace FluentProjections.Tests
                 _targetRegisterer = new TestRegisterer();
                 _targetProjection = new TestProjection();
 
-                new TestConfiguration().RegisterBy(_targetRegisterer);
+                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(_targetProjection);
 
@@ -383,6 +383,60 @@ namespace FluentProjections.Tests
             public void Should_update_with_the_same_projection()
             {
                 Assert.AreSame(_targetProjection, _targetStore.UpdateProjection);
+            }
+        }
+
+        [TestFixture]
+        public class When_handle_event_from_denormalizer
+        {
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
+            {
+                private readonly TestStore _store;
+
+                public TestDenormalizer(TestStore store)
+                {
+                    _store = store;
+
+                    ForEvent<TestEvent>()
+                        .Update()
+                        .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
+                        .Map(p => p.ValueInt32, e => e.ValueInt32);
+                }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
+
+                public void Handle(object @event)
+                {
+                    Handle(@event, _store);
+                }
+            }
+
+            private TestStore _targetStore;
+            private TestDenormalizer _targetDenormalizer;
+
+            [SetUp]
+            public void Init()
+            {
+                var projection = new TestProjection();
+                _targetStore = new TestStore(projection);
+                _targetDenormalizer = new TestDenormalizer(_targetStore);
+            }
+
+            [Test]
+            public void Should_handle_configured_event()
+            {
+                _targetDenormalizer.Handle(new TestEvent());
+                Assert.NotNull(_targetStore.UpdateProjection);
+            }
+
+            [Test]
+            public void Should_skip_unknown_event()
+            {
+                _targetDenormalizer.Handle(new object());
+                Assert.Null(_targetStore.UpdateProjection);
             }
         }
     }

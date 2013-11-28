@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentProjections.EventHandlingStrategies;
 
 namespace FluentProjections
@@ -19,11 +20,23 @@ namespace FluentProjections
             return configuration;
         }
 
-        public void RegisterBy(IFluentEventHandlerRegisterer registerer)
+        protected void Handle<TEvent>(TEvent @event, IFluentProjectionStore store)
         {
-            foreach (IEventHandlingStrategyProvider configuration in _providers)
+            IEnumerable<IFluentEventHandlingStrategy<TEvent>> strategies = _providers
+                .OfType<EventHandlingStrategyProvider<TEvent, TProjection>>()
+                .Select(x => x.Create());
+
+            foreach (var strategy in strategies)
             {
-                configuration.RegisterBy(registerer);
+                strategy.Handle(@event, store);
+            }
+        }
+
+        public void RegisterStrategiesWith(IFluentEventHandlingStrategyRegisterer registerer)
+        {
+            foreach (IEventHandlingStrategyProvider provider in _providers)
+            {
+                provider.RegisterBy(registerer);
             }
         }
     }
