@@ -68,7 +68,7 @@ public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthS
     public MonthStatisticsConfiguration()
     {
         ForEvent<ConcertCreated>()
-            .Save() // update a projection that matches provided key(s) in a store or create a new one when not found
+            .Save() // update a projection that matches provided key(s) in a store or create a new one
                 .Key(p => p.Year, e => e.Date.Year)
                 .Key(p => p.Month, e => e.Date.Month)
                 .Increment(p => p.Concerts);
