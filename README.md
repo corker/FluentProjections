@@ -47,7 +47,7 @@ public class ConcertSeatProjectionConfiguration : FluentProjectionConfiguration<
     public ConcertSeatProjectionConfiguration()
     {
         ForEvent<ConcertCreated>()
-            .Translate(concert => new[] // translate an event into a series of objects
+            .Translate(concert => new[] // translate an event into a series of objects (optional)
             {
                 new DefineSeat { Id = concert.Seats.First().SeatId, ... },
                 new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
