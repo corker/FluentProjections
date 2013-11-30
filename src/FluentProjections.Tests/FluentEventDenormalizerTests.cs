@@ -59,8 +59,8 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
-                        .Insert()
+                    When<TestEvent>()
+                        .AddNew()
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
 
@@ -109,7 +109,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
+                    When<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
@@ -190,7 +190,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
+                    When<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
@@ -273,7 +273,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
+                    When<TestEvent>()
                         .Translate(e => new[]
                         {
                             new TestTranslatedEvent
@@ -285,7 +285,7 @@ namespace FluentProjections.Tests
                                 TranslatedValue = e.ValueInt32 + 1
                             }
                         })
-                        .Insert()
+                        .AddNew()
                         .Map(p => p.ValueInt32, e => e.TranslatedValue);
                 }
 
@@ -335,7 +335,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
+                    When<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
@@ -409,7 +409,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    ForEvent<TestEvent>()
+                    When<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);

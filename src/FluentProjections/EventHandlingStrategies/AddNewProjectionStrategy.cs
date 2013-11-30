@@ -2,12 +2,12 @@
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class InsertProjectionStrategy<TEvent, TProjection> : EventHandlingStrategy<TEvent>
+    public class AddNewProjectionStrategy<TEvent, TProjection> : EventHandlingStrategy<TEvent>
         where TProjection : class, new()
     {
         private readonly Mappers<TEvent, TProjection> _mappers;
 
-        public InsertProjectionStrategy(Mappers<TEvent, TProjection> mappers)
+        public AddNewProjectionStrategy(Mappers<TEvent, TProjection> mappers)
         {
             _mappers = mappers;
         }

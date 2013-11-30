@@ -10,15 +10,15 @@ namespace FluentProjections
         /// <summary>
         ///     Insert a new projection.
         /// </summary>
-        public static InsertProjectionStrategyArguments<TEvent, TProjection> Insert<TEvent, TProjection>(
+        public static AddNewProjectionStrategyArguments<TEvent, TProjection> AddNew<TEvent, TProjection>(
             this EventHandlingStrategyFactory<TEvent, TProjection> source
             ) where TProjection : class, new()
         {
-            var arguments = new InsertProjectionStrategyArguments<TEvent, TProjection>();
+            var arguments = new AddNewProjectionStrategyArguments<TEvent, TProjection>();
             source.SetFactoryMethod(() =>
             {
                 Mappers<TEvent, TProjection> mappers = arguments.Mappers;
-                return (IEventHandlingStrategy<TEvent>) new InsertProjectionStrategy<TEvent, TProjection>(mappers);
+                return (IEventHandlingStrategy<TEvent>) new AddNewProjectionStrategy<TEvent, TProjection>(mappers);
             });
             return arguments;
         }

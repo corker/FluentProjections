@@ -3,11 +3,11 @@ using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class InsertProjectionStrategyArguments<TEvent, TProjection> : IMappersBuilder<TEvent, TProjection>
+    public class AddNewProjectionStrategyArguments<TEvent, TProjection> : IMappersBuilder<TEvent, TProjection>
     {
         private readonly List<Mapper<TEvent, TProjection>> _mappers;
 
-        public InsertProjectionStrategyArguments()
+        public AddNewProjectionStrategyArguments()
         {
             _mappers = new List<Mapper<TEvent, TProjection>>();
         }
