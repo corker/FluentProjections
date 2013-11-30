@@ -36,45 +36,81 @@ To be able to use FluentProjections you need to do the following steps.
 Install-Package FluentProjections
 ```
 
-2. Implement your projection configurations
+
+2. Implement IFluentProjectionStore<TProjection>
 --
 
-Here is an example:
+IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
+
+3. Implement your projection configurations
+--
+
+E.g. "when a concert created add a new projection and map defined properties"
 
 ```
-public class SeatProjectionDenormalizer : FluentEventDenormalizer<SeatProjection>
+public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProjection>
 {
     private readonly IFluentProjectionStore _store;
     
-    public SeatProjectionDenormalizer(IFluentProjectionStore store)
+    public ConcertProjectionDenormalizer(IFluentProjectionStore store)
     {
         _store = store;
 
-        ForEvent<ConcertCreated>()
-            .Translate(concert => new[] // translate an event into a series of objects (optional)
-            {
-                new DefineSeat { Id = concert.Seats.First().SeatId, ... },
-                new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
-            })
-            .Insert() // insert a projection with data mapped from a translated object into a store
-                .Map(projection => projection.Id)
-                .Map(projection => projection.Location, seat.SeatLocation);
-            
-        ForEvent<SeatLocationCorrected>()
-            .Update() // update all projections that matches provided filter(s) in a store
-                .FilterBy(projection => projection.Id, @event => @event.Id)
-                .Map(projection => projection.Location);
+        When<ConcertCreated>()
+            .AddNew()
+                .Do((event, projection) => {
+                    projection.Id = event.ConcertId;
+                    projection.ConcertDate = event.Date;
+                    projection.ConcertName = event.Name;
+                });
     }
 
-    /// <summary>
-    ///     This is a single handler for all registered events
-    /// </summary>
+    public void Handle(ConcertCreated @event) // This is a handler for ConcertCreated event
+    {
+        Handle(@event, _store);
+    }
+}
+```
+
+An incoming event can be translated into a series of other objects:
+
+```
+    When<ConcertCreated>()
+        .Translate(concert => new[]
+        {
+            new DefineSeat { Id = concert.Seats.First().SeatId, ... },
+            new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
+        })
+        .AddNew()
+            .Map(projection => projection.Id)
+            .Map(projection => projection.Location, seat => seat.SeatLocation);
+```
+
+The same denormalizer can contain many event handlers. Just register all of them in the same constructor:
+```
+    When<ConcertCreated>()
+        .Translate(...)
+        .AddNew()
+            .Map(...);
+
+    When<SeatLocationCorrected>()
+        .Update()
+            .FilterBy(...)
+            .Map(...);
+```
+
+A signle handler for all registered in a denormalizer events can be defined:
+
+```
     public void Handle(object @event)
     {
         Handle(@event, _store);
     }
 }
+```
 
+This is an example of a statistics denormalizer. It counts a number of concerts created per month.
+```
 public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatistics>
 {
     private readonly IFluentProjectionStore _store;
@@ -83,36 +119,31 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
     {
         _store = store;
 
-        ForEvent<ConcertCreated>()
-            .Save() // update a projection that matches provided key(s) in a store or create a new one
+        When<ConcertCreated>()
+            .Save() // update a projection that matches provided key(s) or create a new one
                 .Key(p => p.Year, e => e.Date.Year)
                 .Key(p => p.Month, e => e.Date.Month)
                 .Increment(p => p.Concerts);
     }
 
-    /// <summary>
-    ///     This is a handler for ConcertCreated event
-    /// </summary>
-    public void Handle(ConcertCreated @event)
+    public void Handle(object @event)
     {
         Handle(@event, _store);
     }
 }
 ```
 
-3. Implement IFluentProjectionStore<TProjection>
---
-
-IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
-
-Later I'm going to provide implementation for different databases, but right now this is a manual work.
-
-On a project website you can find a test project where more examples can be observed.
+The library is fully covered with unit tests. Look into a FluentProjections.Tests project for more examples.
 
 Happy coding!
 
 What’s new?
 -----------
+
+**Nov 30th, 2013**      
+Based on a feedback I had to make a significant change in a codebase:
+- Handler registerer removed.
+- Configurer turned into a FluentEventDenormalizer that you can inherit from and register as an event handler.
 
 **Nov 24th, 2013**      
 - A codebase reorganized the way you need to reference the only root namespace.
