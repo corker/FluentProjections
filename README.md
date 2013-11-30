@@ -106,7 +106,6 @@ A signle handler for all registered in a denormalizer events can be defined:
     {
         Handle(@event, _store);
     }
-}
 ```
 
 This is an example of a statistics denormalizer. It counts a number of concerts created per month.
