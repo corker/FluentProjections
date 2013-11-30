@@ -21,7 +21,7 @@ namespace FluentProjections
         ///     Register an event handler that can be configured with extensions.
         /// </summary>
         /// <typeparam name="TEvent">A type of an event</typeparam>
-        protected EventHandlingStrategyFactory<TEvent, TProjection> When<TEvent>()
+        protected EventHandlingStrategyFactory<TEvent, TProjection> On<TEvent>()
         {
             var factory = new EventHandlingStrategyFactory<TEvent, TProjection>();
             _factories.Add(factory);

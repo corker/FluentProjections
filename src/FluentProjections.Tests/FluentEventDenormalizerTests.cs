@@ -59,7 +59,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .AddNew()
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
@@ -109,7 +109,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
@@ -190,7 +190,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
@@ -273,7 +273,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .Translate(e => new[]
                         {
                             new TestTranslatedEvent
@@ -335,7 +335,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
@@ -409,7 +409,7 @@ namespace FluentProjections.Tests
                 {
                     _store = store;
 
-                    When<TestEvent>()
+                    On<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
