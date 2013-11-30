@@ -23,12 +23,6 @@ I'm a big fan of configuring and I want to share with you the idea of configurab
 How?
 ====
 
-There is not much you can do right now - only to map properties directly.
-
-There is no concrete persistence implementations, so stay tuned!
-
-To be able to use FluentProjections you need to do the following steps.
-
 1. Install a nuget package
 --
 
