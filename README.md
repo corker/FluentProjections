@@ -57,7 +57,7 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
         _store = store;
 
         When<ConcertCreated>()
-            .Insert()
+            .AddNew()
                 .Map(projection => projection.Id, event => event.ConcertId)
                 .Map(projection => projection.Date)
                 .Map(projection => projection.ConcertName, event => event.Name);
@@ -79,7 +79,7 @@ An incoming event can be translated into a series of other objects:
             new DefineSeat { Id = concert.Seats.First().SeatId, ... },
             new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
         })
-        .Insert()
+        .AddNew()
             .Map(projection => projection.Id)
             .Map(projection => projection.Location, seat => seat.SeatLocation);
 ```
@@ -88,7 +88,7 @@ The same denormalizer can contain many event handlers. Just register all of them
 ```
     When<ConcertCreated>()
         .Translate(...)
-        .Insert()
+        .AddNew()
             .Map(...);
 
     When<SeatLocationCorrected>()
