@@ -42,7 +42,7 @@ Install-Package FluentProjections
 Here is an example:
 
 ```
-public class ConcertSeatProjectionConfiguration : FluentProjectionConfiguration<ConcertSeatProjection>
+public class SeatProjectionConfiguration : FluentProjectionConfiguration<SeatProjection>
 {
     public ConcertSeatProjectionConfiguration()
     {
