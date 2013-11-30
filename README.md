@@ -91,7 +91,7 @@ An incoming event can be translated into a series of other objects:
             .Map(projection => projection.Location, seat => seat.SeatLocation);
 ```
 
-The same denormalizer can contain many event handlers. Just register all of them in the same constructor:
+The same denormalizer can contain many event handlers. Simply register all of them in a single constructor:
 ```
     On<ConcertCreated>()
         .Translate(...)
@@ -104,7 +104,7 @@ The same denormalizer can contain many event handlers. Just register all of them
             .Map(...);
 ```
 
-A signle handler can be defined for all registered events in a single denormalizer:
+A signle handler can be defined for all registered events in a denormalizer:
 
 ```
     public void Handle(object @event)
