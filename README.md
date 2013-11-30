@@ -42,10 +42,14 @@ Install-Package FluentProjections
 Here is an example:
 
 ```
-public class SeatProjectionConfiguration : FluentProjectionConfiguration<SeatProjection>
+public class SeatProjectionDenormalizer : FluentEventDenormalizer<SeatProjection>
 {
-    public ConcertSeatProjectionConfiguration()
+    private readonly IFluentProjectionStore _store;
+    
+    public SeatProjectionDenormalizer(IFluentProjectionStore store)
     {
+        _store = store;
+
         ForEvent<ConcertCreated>()
             .Translate(concert => new[] // translate an event into a series of objects (optional)
             {
@@ -61,17 +65,37 @@ public class SeatProjectionConfiguration : FluentProjectionConfiguration<SeatPro
                 .FilterBy(projection => projection.Id, @event => @event.Id)
                 .Map(projection => projection.Location);
     }
+
+    /// <summary>
+    ///     This is a single handler for all registered events
+    /// </summary>
+    public void Handle(object @event)
+    {
+        Handle(@event, _store);
+    }
 }
 
-public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthStatistics>
+public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatistics>
 {
-    public MonthStatisticsConfiguration()
+    private readonly IFluentProjectionStore _store;
+
+    public MonthStatisticsDenormalizer(IFluentProjectionStore store)
     {
+        _store = store;
+
         ForEvent<ConcertCreated>()
             .Save() // update a projection that matches provided key(s) in a store or create a new one
                 .Key(p => p.Year, e => e.Date.Year)
                 .Key(p => p.Month, e => e.Date.Month)
                 .Increment(p => p.Concerts);
+    }
+
+    /// <summary>
+    ///     This is a handler for ConcertCreated event
+    /// </summary>
+    public void Handle(ConcertCreated @event)
+    {
+        Handle(@event, _store);
     }
 }
 ```
@@ -81,40 +105,7 @@ public class MonthStatisticsConfiguration : FluentProjectionConfiguration<MonthS
 
 IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
 
-Later I'm going to provide implementation for different database types, but right now it's not there.
-
-4. Implement IFluentEventHandlerRegisterer
---
-
-IFluentEventHandlerRegisterer is a bridge between FluentProjections and your event bus. I don't know what event bus you use, so it's up to you how to register handlers in your code.
-
-E.g. NServiceBus uses IHandleMessages<TMessage> interface. I can imagine that you write a generic event handler class that implements IHandleMessages<TMessage> interface and get IFluentEventHandler as an argument in a constructor.
-
-In this case implementation for registerer should create that generic event handler, initialize it with fluent event handler and register generic event handler in your IoC container.
-
-Later I'm going to provide implementation for different event sourcing frameworks, but right now it's not there.
-
-5. Register your projection configurations
---
-
-Here is an example:
-
-```
-public class ApplicationBootstrap {
-
-    public Bootstrap() {
-        var iocContainer = ...
-        
-        // create a registerer that register fluent event handlers in a container
-        var registerer = new MyFluentEventHandlerRegisterer(iocContainer);
-        
-        // register fluent event handlers that constructed by a configuration
-        new MonthStatisticsConfiguration().RegisterBy(registerer);
-        
-        ...
-    }
-}
-```
+Later I'm going to provide implementation for different databases, but right now this is a manual work.
 
 On a project website you can find a test project where more examples can be observed.
 
