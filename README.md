@@ -47,7 +47,7 @@ If you like dapper I'd be happy to say that there is an implementation for Dappe
 Install-Package FluentProjections.Dapper
 ```
 
-3. Implement your event denormalizers
+3. Implement event denormalizers
 --
 
 E.g. "when a concert created add a new projection and map defined properties"
