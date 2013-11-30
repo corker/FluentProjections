@@ -134,7 +134,7 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
 }
 ```
 
-The library is fully covered with unit test. You can take a look into a unit test project for more examples.
+The library is fully covered with unit tests. Look into a FluentProjections.Tests project for more examples.
 
 Happy coding!
 
