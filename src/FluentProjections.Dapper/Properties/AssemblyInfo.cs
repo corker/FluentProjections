@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FluentProjections")]
-[assembly: AssemblyDescription("Fluent Projections provides a configurable hub that handles events and map them to database projections (read models).")]
+[assembly: AssemblyTitle("FluentProjections.Dapper")]
+[assembly: AssemblyDescription("An extension for FluentProjections package. Impements persistance using Dapper package.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Michael Borisov")]
-[assembly: AssemblyProduct("FluentProjections")]
+[assembly: AssemblyProduct("FluentProjections.Dapper")]
 [assembly: AssemblyCopyright("Copyright Michael Borisov © 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("3b75e3b2-ee0f-4571-a461-a26cf69828f3")]
+[assembly: Guid("d8e18861-b886-4972-a6f4-b8103fa33345")]
 
 // Version information for an assembly consists of the following four values:
 //
