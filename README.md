@@ -56,7 +56,7 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
     {
         _store = store;
 
-        When<ConcertCreated>()
+        On<ConcertCreated>()
             .AddNew()
                 .Do((event, projection) => {
                     projection.Id = event.ConcertId;
@@ -75,7 +75,7 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
 An incoming event can be translated into a series of other objects:
 
 ```
-    When<ConcertCreated>()
+    On<ConcertCreated>()
         .Translate(concert => new[]
         {
             new DefineSeat { Id = concert.Seats.First().SeatId, ... },
@@ -88,12 +88,12 @@ An incoming event can be translated into a series of other objects:
 
 The same denormalizer can contain many event handlers. Just register all of them in the same constructor:
 ```
-    When<ConcertCreated>()
+    On<ConcertCreated>()
         .Translate(...)
         .AddNew()
             .Map(...);
 
-    When<SeatLocationCorrected>()
+    On<SeatLocationCorrected>()
         .Update()
             .FilterBy(...)
             .Map(...);
@@ -119,7 +119,7 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
     {
         _store = store;
 
-        When<ConcertCreated>()
+        On<ConcertCreated>()
             .Save() // update a projection that matches provided key(s) or create a new one
                 .Key(p => p.Year, e => e.Date.Year)
                 .Key(p => p.Month, e => e.Date.Month)
