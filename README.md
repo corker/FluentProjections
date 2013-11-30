@@ -58,9 +58,11 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
 
         When<ConcertCreated>()
             .AddNew()
-                .Map(projection => projection.Id, event => event.ConcertId)
-                .Map(projection => projection.Date)
-                .Map(projection => projection.ConcertName, event => event.Name);
+                .Do((event, projection) => {
+                    projection.Id = event.ConcertId;
+                    projection.ConcertDate = event.Date;
+                    projection.ConcertName = event.Name;
+                });
     }
 
     public void Handle(ConcertCreated @event) // This is a handler for ConcertCreated event
@@ -107,7 +109,7 @@ A signle handler for all registered in a denormalizer events can be defined:
 }
 ```
 
-This is an example of a statistics denormalizer. It counts a number of concerts that was created per month.
+This is an example of a statistics denormalizer. It counts a number of concerts created per month.
 ```
 public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatistics>
 {
@@ -124,10 +126,7 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
                 .Increment(p => p.Concerts);
     }
 
-    /// <summary>
-    ///     This is a handler for ConcertCreated event
-    /// </summary>
-    public void Handle(ConcertCreated @event)
+    public void Handle(object @event)
     {
         Handle(@event, _store);
     }
