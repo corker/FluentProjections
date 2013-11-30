@@ -42,7 +42,12 @@ Install-Package FluentProjections
 
 IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
 
-3. Implement your projection configurations
+If you like dapper I'd be happy to say that there is an implementation for DapperFluentProjectionStore:
+```
+Install-Package FluentProjections.Dapper
+```
+
+3. Implement your projection denormalizers
 --
 
 E.g. "when a concert created add a new projection and map defined properties"
