@@ -140,6 +140,11 @@ Happy coding!
 What’s new?
 -----------
 
+**Nov 30th, 2013**      
+Based on a feedback I had to make a significant change in a codebase:
+- Handler registerer removed.
+- Configurer turned into a FluentEventDenormalizer that you can inherit from and register as an event handler.
+
 **Nov 24th, 2013**      
 - A codebase reorganized the way you need to reference the only root namespace.
 - Save method introduced - see configuration examples above.
