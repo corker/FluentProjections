@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class TranslateStrategy<TEvent, TTranslatedEvent> : IFluentEventHandlingStrategy<TEvent>
+    public class TranslateStrategy<TEvent, TTranslatedEvent> : EventHandlingStrategy<TEvent>
     {
         private readonly Func<TEvent, IEnumerable<TTranslatedEvent>> _translate;
-        private readonly IFluentEventHandlingStrategy<TTranslatedEvent> _strategy;
+        private readonly IEventHandlingStrategy<TTranslatedEvent> _strategy;
 
         public TranslateStrategy(Func<TEvent, IEnumerable<TTranslatedEvent>> translate,
-            IFluentEventHandlingStrategy<TTranslatedEvent> strategy)
+            IEventHandlingStrategy<TTranslatedEvent> strategy)
         {
             _translate = translate;
             _strategy = strategy;
         }
 
-        public void Handle(TEvent @event, IFluentProjectionStore store)
+        public override void Handle(TEvent @event, IFluentProjectionStore store)
         {
             IEnumerable<TTranslatedEvent> translatedEvents = _translate(@event);
             foreach (TTranslatedEvent translatedEvent  in translatedEvents)

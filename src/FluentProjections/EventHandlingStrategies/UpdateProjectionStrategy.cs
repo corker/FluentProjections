@@ -3,7 +3,7 @@ using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class UpdateProjectionStrategy<TEvent, TProjection> : IFluentEventHandlingStrategy<TEvent>
+    public class UpdateProjectionStrategy<TEvent, TProjection> : EventHandlingStrategy<TEvent>
         where TProjection : class
     {
         private readonly Filters<TEvent> _filters;
@@ -16,7 +16,7 @@ namespace FluentProjections.EventHandlingStrategies
             _mappers = mappers;
         }
 
-        public void Handle(TEvent @event, IFluentProjectionStore store)
+        public override void Handle(TEvent @event, IFluentProjectionStore store)
         {
             IEnumerable<FluentProjectionFilterValue> filterValues = _filters.GetValues(@event);
             IEnumerable<TProjection> projections = store.Read<TProjection>(filterValues);

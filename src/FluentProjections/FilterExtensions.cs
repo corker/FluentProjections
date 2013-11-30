@@ -8,7 +8,7 @@ namespace FluentProjections
     public static class FilterExtensions
     {
         /// <summary>
-        /// Update projections that match a key.
+        /// Update projections that match a filter.
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>

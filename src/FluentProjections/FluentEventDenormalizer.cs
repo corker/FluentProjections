@@ -4,39 +4,60 @@ using FluentProjections.EventHandlingStrategies;
 
 namespace FluentProjections
 {
+    /// <summary>
+    ///     A base class for a projection denormalizer.
+    /// </summary>
+    /// <typeparam name="TProjection">A type to project events on</typeparam>
     public abstract class FluentEventDenormalizer<TProjection> where TProjection : class, new()
     {
-        private readonly List<IEventHandlingStrategyProvider> _providers;
+        private readonly List<IEventHandlingStrategyFactory> _factories;
 
         protected FluentEventDenormalizer()
         {
-            _providers = new List<IEventHandlingStrategyProvider>();
+            _factories = new List<IEventHandlingStrategyFactory>();
         }
 
-        protected EventHandlingStrategyProvider<TEvent, TProjection> ForEvent<TEvent>()
+        /// <summary>
+        ///     Register an event handler that can be configured with extensions.
+        /// </summary>
+        /// <typeparam name="TEvent">A type of an event</typeparam>
+        protected EventHandlingStrategyFactory<TEvent, TProjection> ForEvent<TEvent>()
         {
-            var configuration = new EventHandlingStrategyProvider<TEvent, TProjection>();
-            _providers.Add(configuration);
-            return configuration;
+            var factory = new EventHandlingStrategyFactory<TEvent, TProjection>();
+            _factories.Add(factory);
+            return factory;
         }
 
-        protected void Handle<TEvent>(TEvent @event, IFluentProjectionStore store)
+        /// <summary>
+        ///     Handle event with all registered handlers.
+        /// </summary>
+        /// <param name="event">An event to be handled</param>
+        /// <param name="store">A store to read and write projections</param>
+        protected void Handle(object @event, IFluentProjectionStore store)
         {
-            IEnumerable<IFluentEventHandlingStrategy<TEvent>> strategies = _providers
-                .OfType<EventHandlingStrategyProvider<TEvent, TProjection>>()
-                .Select(x => x.Create());
+            IEnumerable<IEventHandlingStrategy> strategies = _factories.Select(x => x.Create());
 
-            foreach (var strategy in strategies)
+            foreach (IEventHandlingStrategy strategy in strategies)
             {
                 strategy.Handle(@event, store);
             }
         }
 
-        public void RegisterStrategiesWith(IFluentEventHandlingStrategyRegisterer registerer)
+        /// <summary>
+        ///     Handle event of type <typeparam name="TEvent"></typeparam> with handlers registered for this type.
+        /// </summary>
+        /// <typeparam name="TEvent">A type of event</typeparam>
+        /// <param name="event">An event to be handled</param>
+        /// <param name="store">A store to read and write projections</param>
+        protected void Handle<TEvent>(TEvent @event, IFluentProjectionStore store)
         {
-            foreach (IEventHandlingStrategyProvider provider in _providers)
+            IEnumerable<IEventHandlingStrategy<TEvent>> strategies = _factories
+                .OfType<IEventHandlingStrategyFactory<TEvent>>()
+                .Select(x => x.Create());
+
+            foreach (var strategy in strategies)
             {
-                provider.RegisterBy(registerer);
+                strategy.Handle(@event, store);
             }
         }
     }

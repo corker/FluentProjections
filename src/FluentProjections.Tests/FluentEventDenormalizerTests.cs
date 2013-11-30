@@ -18,16 +18,6 @@ namespace FluentProjections.Tests
             public long ValueInt64 { get; set; }
         }
 
-        private class TestRegisterer : IFluentEventHandlingStrategyRegisterer
-        {
-            public IFluentEventHandlingStrategy<TestEvent> HandlingStrategy { get; private set; }
-
-            public void Register<TEvent>(IFluentEventHandlingStrategy<TEvent> fluentEventHandlingStrategy)
-            {
-                HandlingStrategy = (IFluentEventHandlingStrategy<TestEvent>) fluentEventHandlingStrategy;
-            }
-        }
-
         private class TestStore : IFluentProjectionStore
         {
             public TestStore(TestProjection readProjection)
@@ -63,24 +53,28 @@ namespace FluentProjections.Tests
         {
             private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestDenormalizer()
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
                 {
+                    _store = store;
+
                     ForEvent<TestEvent>()
                         .Insert()
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
             }
 
             private TestStore _targetStore;
-            private TestRegisterer _targetRegisterer;
 
             [TestFixtureSetUp]
             public void Init()
             {
-                _targetRegisterer = new TestRegisterer();
-
-                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
-
                 _targetStore = new TestStore(null);
 
                 var @event = new TestEvent
@@ -88,7 +82,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
+                new TestDenormalizer(_targetStore).Handle(@event);
             }
 
             [Test]
@@ -109,26 +103,31 @@ namespace FluentProjections.Tests
         {
             private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestDenormalizer()
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
                 {
+                    _store = store;
+
                     ForEvent<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
                 }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
             }
 
             private TestStore _targetStore;
-            private TestRegisterer _targetRegisterer;
             private TestProjection _targetProjection;
 
             [TestFixtureSetUp]
             public void Init()
             {
-                _targetRegisterer = new TestRegisterer();
                 _targetProjection = new TestProjection();
-
-                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(_targetProjection);
 
@@ -138,7 +137,7 @@ namespace FluentProjections.Tests
                     ValueInt64 = 888
                 };
 
-                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
+                new TestDenormalizer(_targetStore).Handle(@event);
             }
 
             [Test]
@@ -185,25 +184,29 @@ namespace FluentProjections.Tests
         {
             private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestDenormalizer()
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
                 {
+                    _store = store;
+
                     ForEvent<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
                 }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
             }
 
             private TestStore _targetStore;
-            private TestRegisterer _targetRegisterer;
 
             [TestFixtureSetUp]
             public void Init()
             {
-                _targetRegisterer = new TestRegisterer();
-
-                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
-
                 _targetStore = new TestStore(null);
 
                 var @event = new TestEvent
@@ -212,7 +215,7 @@ namespace FluentProjections.Tests
                     ValueInt64 = 888
                 };
 
-                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
+                new TestDenormalizer(_targetStore).Handle(@event);
             }
 
             [Test]
@@ -264,8 +267,12 @@ namespace FluentProjections.Tests
 
             private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestDenormalizer()
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
                 {
+                    _store = store;
+
                     ForEvent<TestEvent>()
                         .Translate(e => new[]
                         {
@@ -281,18 +288,18 @@ namespace FluentProjections.Tests
                         .Insert()
                         .Map(p => p.ValueInt32, e => e.TranslatedValue);
                 }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
             }
 
             private TestStore _targetStore;
-            private TestRegisterer _targetRegisterer;
 
             [TestFixtureSetUp]
             public void Init()
             {
-                _targetRegisterer = new TestRegisterer();
-
-                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
-
                 _targetStore = new TestStore(null);
 
                 var @event = new TestEvent
@@ -300,7 +307,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
+                new TestDenormalizer(_targetStore).Handle(@event);
             }
 
             [Test]
@@ -322,26 +329,31 @@ namespace FluentProjections.Tests
         {
             private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
             {
-                public TestDenormalizer()
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
                 {
+                    _store = store;
+
                     ForEvent<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
             }
 
             private TestStore _targetStore;
-            private TestRegisterer _targetRegisterer;
             private TestProjection _targetProjection;
 
             [TestFixtureSetUp]
             public void Init()
             {
-                _targetRegisterer = new TestRegisterer();
                 _targetProjection = new TestProjection();
-
-                new TestDenormalizer().RegisterStrategiesWith(_targetRegisterer);
 
                 _targetStore = new TestStore(_targetProjection);
 
@@ -350,7 +362,7 @@ namespace FluentProjections.Tests
                     ValueInt32 = 777
                 };
 
-                _targetRegisterer.HandlingStrategy.Handle(@event, _targetStore);
+                new TestDenormalizer(_targetStore).Handle(@event);
             }
 
             [Test]
