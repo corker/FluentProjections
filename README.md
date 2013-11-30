@@ -120,7 +120,7 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
         _store = store;
 
         When<ConcertCreated>()
-            .Save() // update a projection that matches provided key(s) in a store or create a new one
+            .Save() // update a projection that matches provided key(s) or create a new one
                 .Key(p => p.Year, e => e.Date.Year)
                 .Key(p => p.Month, e => e.Date.Month)
                 .Increment(p => p.Concerts);
