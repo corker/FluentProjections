@@ -1,24 +1,17 @@
 fluent-projections
 ==================
 
-Fluent Projections provides a configurable hub that can handle events and map them to database projection tables (read models).
+This package provides a configurable hub that can handle events and map them to event projection tables (read models).
 
 Why?
 ====
 
-When CQRS and Event Sourcing come in, you have to deal with projection tables or read models. Projection contains data prepared for a specific view. To process events we use so called denormalizers. Denormalizer is a hub that handle domain evens and map them to a projection. To define a mapping between events and a projection I have to write a very similar code.
-
-I think it's a kind of waste of time to do it again and again.
+When CQRS and Event Sourcing come in place, we have to deal with event projection tables or read models. In most cases a projection contains a data model prepared for a specific view for the best performance of querying this data. To project events we use so called event denormalizers. An event denormalizer is a hub that can handle evens and project them onto an event projection. An implementation for a denormalizer usually is a very trivial and code is very similar from one denormalizer to another and from one project to another.
 
 What?
 ====
 
-So, I noticed some patterns in this process:
-* Direct mapping to a projection property with another or even the same name;
-* All kind of aggregations;
-* All kind of lookups.
-
-I'm a big fan of configuring and I want to share with you the idea of configurable projection denormalizers that I call Fluent Projections.
+With this project I want to minimize an effort to define event denormalizers and I want to provide a semantic way of doing it. I beleive it's great if I just type something like "On a concert created event add a new projection with a concert date and title" and a computer could translate the text into a workable code for me. What do you think?
 
 How?
 ====
@@ -30,23 +23,15 @@ How?
 Install-Package FluentProjections
 ```
 
-
-2. Implement IFluentProjectionStore<TProjection>
+2. Implement event denormalizers
 --
 
-IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
-
-If you like dapper I'd be happy to say that there is an implementation for DapperFluentProjectionStore:
-```
-Install-Package FluentProjections.Dapper
-```
-
-3. Implement event denormalizers
---
-
-E.g. "when a concert created add a new projection and map defined properties"
+To implement an event denormalizer inherit from FluentEventDenormalizer<_ProjectionClassName_> and define a behavior for events that has to be projected in a class constructor like it's shown below:
 
 ```
+/// <summary>
+///    "On a concert created event add a new projection with a concert date and title"
+/// </summary> 
 public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProjection>
 {
     private readonly IFluentProjectionStore _store;
@@ -57,11 +42,9 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
 
         On<ConcertCreated>()
             .AddNew()
-                .Do((event, projection) => {
-                    projection.Id = event.ConcertId;
-                    projection.ConcertDate = event.Date;
-                    projection.ConcertName = event.Name;
-                });
+            .Map(projection.Id)
+            .Map(projection.ConcertDate)
+            .Map(projection.ConcertTitle);
     }
 
     public void Handle(ConcertCreated @event) // This is a handler for ConcertCreated event
@@ -81,8 +64,8 @@ An incoming event can be translated into a series of other objects:
             new DefineSeat { Id = concert.Seats.Last().SeatId, ... }
         })
         .AddNew()
-            .Map(projection => projection.Id)
-            .Map(projection => projection.Location, seat => seat.SeatLocation);
+        .Map(projection => projection.Id)
+        .Map(projection => projection.Location, seat => seat.SeatLocation);
 ```
 
 The same denormalizer can contain many event handlers. Simply register all of them in a single constructor:
@@ -90,12 +73,12 @@ The same denormalizer can contain many event handlers. Simply register all of th
     On<ConcertCreated>()
         .Translate(...)
         .AddNew()
-            .Map(...);
+        .Map(...);
 
     On<SeatLocationCorrected>()
         .Update()
-            .FilterBy(...)
-            .Map(...);
+        .FilterBy(...)
+        .Map(...);
 ```
 
 A signle handler can be defined for all registered events in a denormalizer:
@@ -107,7 +90,7 @@ A signle handler can be defined for all registered events in a denormalizer:
     }
 ```
 
-This is an example of a statistics denormalizer. It counts a number of concerts created per month.
+Finally this is an example of a statistics denormalizer. It counts a number of concerts created per month.
 ```
 public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatistics>
 {
@@ -119,9 +102,9 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
 
         On<ConcertCreated>()
             .Save() // update a projection that matches provided key(s) or create a new one
-                .Key(p => p.Year, e => e.Date.Year)
-                .Key(p => p.Month, e => e.Date.Month)
-                .Increment(p => p.Concerts);
+            .Key(p => p.Year, e => e.Date.Year)
+            .Key(p => p.Month, e => e.Date.Month)
+            .Increment(p => p.Concerts);
     }
 
     public void Handle(object @event)
@@ -129,6 +112,16 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
         Handle(@event, _store);
     }
 }
+```
+
+3. Implement IFluentProjectionStore<TProjection>
+--
+
+IFluentProjectionStore<TProjection> is a persistence provider for your projections. It should be able to read, insert and update projections.
+
+If you like dapper I'd be happy to say that there is an implementation for DapperFluentProjectionStore:
+```
+Install-Package FluentProjections.Dapper
 ```
 
 The package is fully covered with unit tests. Look into a FluentProjections.Tests project for more examples.
