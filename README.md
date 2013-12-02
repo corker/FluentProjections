@@ -26,7 +26,7 @@ Install-Package FluentProjections
 2. Implement event denormalizers
 --
 
-To implement an event denormalizer inherit from FluentEventDenormalizer<_ProjectionClassName_> and define a behavior for events that has to be projected in a class constructor like it's shown below:
+To implement an event denormalizer inherit from FluentEventDenormalizer<_ProjectionClassName_> and define a behavior for events that have to be projected in a class constructor like it's shown below:
 
 ```
 /// <summary>
