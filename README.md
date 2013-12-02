@@ -1,7 +1,7 @@
 fluent-projections
 ==================
 
-This package provides a configurable hub that can handle events and map them to event projection tables (read models).
+This package provides a configurable hub that can handle events and map them onto event projection tables (read models).
 
 Why?
 ====
