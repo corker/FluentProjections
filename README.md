@@ -11,7 +11,7 @@ When CQRS and Event Sourcing come in place, we have to deal with event projectio
 What?
 ====
 
-With this project I want to minimize an effort to define event denormalizers and I want to provide a semantic way of doing it. I beleive it's great if I just type something like "On a concert created event add a new projection with a concert date and title" and a computer could translate the text into a workable code for me. What do you think?
+With this project I want to minimize an effort on defining event denormalizers by providing a semantic way of doing it. I beleive it's great if I just type something like "On a concert created event add a new projection with a concert date and title" and a computer could translate the text into a workable code for me. What do you think?
 
 How?
 ====
