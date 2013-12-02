@@ -6,12 +6,12 @@ This package provides a configurable hub that can handle events and map them to 
 Why?
 ====
 
-When CQRS and Event Sourcing come in place, we have to deal with event projection tables or read models. In most cases a projection contains a data model prepared for a specific view for the best performance of querying this data. To project events we use so called event denormalizers. An event denormalizer is a hub that can handle evens and project them onto an event projection. An implementation for a denormalizer usually is trivial but time consuming and code is very similar from one denormalizer to another and from one project to another.
+When CQRS and Event Sourcing come in place, we have to deal with event projections or read models. In most cases a projection contains a data model prepared for a specific view optimized for querying. To map events onto projections we use so called event denormalizers. An implementation for a denormalizer usually is trivial but it's time consuming and code is very similar from one denormalizer to another.
 
 What?
 ====
 
-With this project I want to minimize an effort on defining event denormalizers by providing a semantic way of doing it. I beleive it's great if I just type something like "On a concert created event add a new projection with a concert date and title" and a computer could translate the text into a workable code for me. What do you think?
+With this project I want to minimize an effort on defining event denormalizers by providing a semantic way of doing it. I beleive it's great if I can type "On a concert created event add a new projection with a concert date and title" and a computer would translate it into a code. What do you think?
 
 How?
 ====
