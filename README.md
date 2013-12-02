@@ -6,7 +6,7 @@ This package provides a configurable hub that can handle events and map them to 
 Why?
 ====
 
-When CQRS and Event Sourcing come in place, we have to deal with event projection tables or read models. In most cases a projection contains a data model prepared for a specific view for the best performance of querying this data. To project events we use so called event denormalizers. An event denormalizer is a hub that can handle evens and project them onto an event projection. An implementation for a denormalizer usually is trivial, but time consuming and code is very similar from one denormalizer to another and from one project to another.
+When CQRS and Event Sourcing come in place, we have to deal with event projection tables or read models. In most cases a projection contains a data model prepared for a specific view for the best performance of querying this data. To project events we use so called event denormalizers. An event denormalizer is a hub that can handle evens and project them onto an event projection. An implementation for a denormalizer usually is trivial but time consuming and code is very similar from one denormalizer to another and from one project to another.
 
 What?
 ====
