@@ -23,6 +23,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.Dapper", "FluentProjections.Dapper\FluentProjections.Dapper.csproj", "{233E4E9D-675B-4ED8-9ACB-831F8112472E}"
 EndProject
 Global
+	GlobalSection(CodealikeProperties) = postSolution
+		SolutionGuid = 8c61cd7e-89b5-48c0-9ef1-bb2918910c03
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
