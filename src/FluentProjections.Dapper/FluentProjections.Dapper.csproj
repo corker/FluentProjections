@@ -38,8 +38,9 @@
     <Reference Include="DapperExtensions">
       <HintPath>..\packages\DapperExtensions.1.4.3\lib\net40\DapperExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="FluentProjections">
-      <HintPath>..\packages\FluentProjections.0.0.3.0\lib\net35\FluentProjections.dll</HintPath>
+    <Reference Include="FluentProjections, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentProjections.0.0.4.0\lib\net35\FluentProjections.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

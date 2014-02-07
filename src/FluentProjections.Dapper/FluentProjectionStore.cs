@@ -17,21 +17,22 @@ namespace FluentProjections.Dapper
             _transaction = transaction;
         }
 
-        public IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
+        public IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values)
+            where TProjection : class
         {
             var predicate = new PredicateGroup
-            {
-                Operator = GroupOperator.And,
-                Predicates = values
-                    .Select(x => new FieldPredicate<TProjection>
-                    {
-                        PropertyName = x.Property.Name,
-                        Operator = Operator.Eq,
-                        Value = x.Value
-                    })
-                    .Cast<IPredicate>()
-                    .ToList()
-            };
+                {
+                    Operator = GroupOperator.And,
+                    Predicates = values
+                        .Select(x => new FieldPredicate<TProjection>
+                            {
+                                PropertyName = x.Property.Name,
+                                Operator = Operator.Eq,
+                                Value = x.Value
+                            })
+                        .Cast<IPredicate>()
+                        .ToList()
+                };
             return _transaction.Connection.GetList<TProjection>(predicate, null, _transaction);
         }
 
@@ -43,6 +44,24 @@ namespace FluentProjections.Dapper
         public void Insert<TProjection>(TProjection projection) where TProjection : class
         {
             _transaction.Connection.Insert(projection, _transaction);
+        }
+
+        public void Remove<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
+        {
+            var predicate = new PredicateGroup
+                {
+                    Operator = GroupOperator.And,
+                    Predicates = values
+                        .Select(x => new FieldPredicate<TProjection>
+                            {
+                                PropertyName = x.Property.Name,
+                                Operator = Operator.Eq,
+                                Value = x.Value
+                            })
+                        .Cast<IPredicate>()
+                        .ToList()
+                };
+            _transaction.Connection.Delete<TProjection>(predicate, _transaction);
         }
     }
 }
