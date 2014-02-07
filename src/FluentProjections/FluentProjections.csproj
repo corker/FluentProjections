@@ -38,14 +38,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EventHandlingStrategies\EventHandlingStrategy.cs" />
+    <Compile Include="EventHandlingStrategies\RemoveProjectionStrategy.cs" />
+    <Compile Include="EventHandlingStrategies\RemoveProjectionStrategyArguments.cs" />
+    <Compile Include="RemoveProjectionStrategyArgumentsExtensions.cs" />
     <Compile Include="MapperExtensions.cs" />
     <Compile Include="EventExtensions.cs" />
     <Compile Include="EventHandlingStrategies\SaveProjectionStrategyArguments.cs" />
     <Compile Include="EventHandlingStrategies\UpdateProjectionStrategyArguments.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Key.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Keys.cs" />
-    <Compile Include="KeyExtensions.cs" />
-    <Compile Include="FilterExtensions.cs" />
+    <Compile Include="SaveProjectionStrategyArgumentsExtensions.cs" />
+    <Compile Include="UpdateProjectionStrategyArgumentsExtensions.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\IMappersBuilder.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\IKeysBuilder.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\IFiltersBuilder.cs" />

@@ -119,6 +119,22 @@ namespace FluentProjections.Tests
             }
 
             [Test]
+            public void Should_set_to_projection()
+            {
+                // Arrange
+                var @event = new TestEvent();
+                var projection = new TestProjection();
+                var builder = new AddNewProjectionStrategyArguments<TestEvent, TestProjection>();
+                builder.Set(p => p.ProjectionProperty, 555);
+
+                // Act
+                builder.Mappers.Map(@event, projection);
+
+                // Assert
+                Assert.AreEqual(555, projection.ProjectionProperty);
+            }
+
+            [Test]
             public void Should_map_using_only_projection_property_name()
             {
                 // Arrange

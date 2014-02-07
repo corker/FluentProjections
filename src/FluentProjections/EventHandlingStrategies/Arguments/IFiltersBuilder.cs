@@ -1,6 +1,6 @@
 ﻿namespace FluentProjections.EventHandlingStrategies.Arguments
 {
-    public interface IFiltersBuilder<TEvent, TProjection>: IMappersBuilder<TEvent, TProjection>
+    public interface IFiltersBuilder<TEvent, TProjection>
     {
         void AddFilter(Filter<TEvent> filter);
     }

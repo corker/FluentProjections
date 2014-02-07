@@ -73,5 +73,21 @@ namespace FluentProjections
             });
             return factory;
         }
+
+        /// <summary>
+        ///     Remove projections.
+        /// </summary>
+        public static RemoveProjectionStrategyArguments<TEvent, TProjection> Remove<TEvent, TProjection>(
+            this EventHandlingStrategyFactory<TEvent, TProjection> source
+            ) where TProjection : class, new()
+        {
+            var arguments = new RemoveProjectionStrategyArguments<TEvent, TProjection>();
+            source.SetFactoryMethod(() =>
+            {
+                Filters<TEvent> filters = arguments.Filters;
+                return (IEventHandlingStrategy<TEvent>)new RemoveProjectionStrategy<TEvent, TProjection>(filters);
+            });
+            return arguments;
+        }
     }
 }

@@ -7,5 +7,6 @@ namespace FluentProjections
         IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection: class;
         void Update<TProjection>(TProjection projection) where TProjection : class;
         void Insert<TProjection>(TProjection projection) where TProjection : class;
+        void Remove<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class;
     }
 }

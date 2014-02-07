@@ -8,7 +8,7 @@ namespace FluentProjections
     public static class MapperExtensions
     {
         /// <summary>
-        /// Do an <param name="action"></param> with <typeparam name="TProjection"></typeparam> using <typeparam name="TEvent"></typeparam>
+        ///     Do an action with a projection using an event
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -24,7 +24,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Map a property from <typeparam name="TEvent"></typeparam> to a <typeparam name="TProjection"></typeparam>
+        ///     Map a property from an event to a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -42,7 +42,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Map a property from <typeparam name="TEvent"></typeparam> with the same name as in <typeparam name="TProjection"></typeparam>
+        ///     Map a property from an event with the same name as in a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -59,7 +59,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Add a property value from <typeparam name="TEvent"></typeparam> to a <typeparam name="TProjection"></typeparam>
+        ///     Add a property value from an event to a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -77,7 +77,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Add a property value from <typeparam name="TEvent"></typeparam> with the same name as in <typeparam name="TProjection"></typeparam>
+        ///     Add a property value from an event with the same name as in a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -95,7 +95,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Increment a property value in <typeparam name="TProjection"></typeparam>
+        ///     Increment a property value in a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -110,7 +110,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Substract a property value from <typeparam name="TEvent"></typeparam> from a <typeparam name="TProjection"></typeparam>
+        ///     Substract an event property value from a projection propetry
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -128,7 +128,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Substract a property value from <typeparam name="TEvent"></typeparam> with the same name as in <typeparam name="TProjection"></typeparam>
+        ///     Substract an event property value from a property with the same name as in a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -146,7 +146,7 @@ namespace FluentProjections
         }
 
         /// <summary>
-        /// Decrement a property value in <typeparam name="TProjection"></typeparam>
+        ///     Decrement a property value in a projection
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -158,6 +158,24 @@ namespace FluentProjections
             Expression<Func<TProjection, long>> projectionProperty)
         {
             return source.Substract(projectionProperty, e => 1);
+        }
+
+        /// <summary>
+        ///     Set a property value
+        /// </summary>
+        /// <typeparam name="TEvent">An event type</typeparam>
+        /// <typeparam name="TProjection">A projection type</typeparam>
+        /// <typeparam name="TValue">A type of projection property</typeparam>
+        /// <param name="source">An argument builder that contains resulting mapper</param>
+        /// <param name="projectionProperty">An expression that identifies a projection property</param>
+        /// <param name="value">A new value for the property</param>
+        /// <returns>An argument builder that contains resulting mapper</returns>
+        public static IMappersBuilder<TEvent, TProjection> Set<TEvent, TProjection, TValue>(
+            this IMappersBuilder<TEvent, TProjection> source,
+            Expression<Func<TProjection, TValue>> projectionProperty, TValue value)
+        {
+            Action<TProjection, TValue> operation = CreateSetOperation(projectionProperty);
+            return source.Do((e, p) => operation(p, value));
         }
 
         private static IMappersBuilder<TEvent, TProjection> Do<TEvent, TProjection, TValue>(
@@ -183,7 +201,8 @@ namespace FluentProjections
             Expression<Action<TProjection, TValue>> lambda =
                 Expression.Lambda<Action<TProjection, TValue>>(
                     Expression.Call(parameterProjection, setMethod,
-                        Expression.MakeBinary(type, Expression.Call(parameterProjection, getMethod), parameterValue)),
+                                    Expression.MakeBinary(type, Expression.Call(parameterProjection, getMethod),
+                                                          parameterValue)),
                     parameterProjection,
                     parameterValue
                     );
@@ -191,7 +210,8 @@ namespace FluentProjections
             return lambda.Compile();
         }
 
-        private static PropertyInfo GetEventPropertyInfo<TEvent, TProjection, TValue>(Expression<Func<TProjection, TValue>> projectionProperty)
+        private static PropertyInfo GetEventPropertyInfo<TEvent, TProjection, TValue>(
+            Expression<Func<TProjection, TValue>> projectionProperty)
         {
             PropertyInfo propertyInfo = typeof (TEvent).GetProperty(GetPropertyInfo(projectionProperty).Name);
             if (propertyInfo == null)
@@ -201,7 +221,8 @@ namespace FluentProjections
             return propertyInfo;
         }
 
-        private static PropertyInfo GetPropertyInfo<TProjection, TValue>(Expression<Func<TProjection, TValue>> expression)
+        private static PropertyInfo GetPropertyInfo<TProjection, TValue>(
+            Expression<Func<TProjection, TValue>> expression)
         {
             return (PropertyInfo) ((MemberExpression) expression.Body).Member;
         }
@@ -211,7 +232,8 @@ namespace FluentProjections
             return (TValue) propertyInfo.GetValue(@event, new object[0]);
         }
 
-        private static Action<TProjection, TValue> CreateSetOperation<TProjection, TValue>(Expression<Func<TProjection, TValue>> expression)
+        private static Action<TProjection, TValue> CreateSetOperation<TProjection, TValue>(
+            Expression<Func<TProjection, TValue>> expression)
         {
             PropertyInfo property = GetPropertyInfo(expression);
             MethodInfo setMethod = property.GetSetMethod();

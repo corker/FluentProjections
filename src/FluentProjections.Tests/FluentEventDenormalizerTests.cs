@@ -25,14 +25,15 @@ namespace FluentProjections.Tests
                 ReadProjection = readProjection;
             }
 
-            public IEnumerable<FluentProjectionFilterValue> FilterValues { get; private set; }
+            public IEnumerable<FluentProjectionFilterValue> ReadFilterValues { get; private set; }
             public TestProjection ReadProjection { get; private set; }
             public TestProjection UpdateProjection { get; private set; }
             public List<TestProjection> InsertProjections { get; private set; }
+            public IEnumerable<FluentProjectionFilterValue> RemoveFilterValues { get; private set; }
 
             public IEnumerable<TProjection> Read<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
             {
-                FilterValues = values;
+                ReadFilterValues = values;
                 return new[] {ReadProjection}.OfType<TProjection>();
             }
 
@@ -45,6 +46,11 @@ namespace FluentProjections.Tests
             {
                 InsertProjections = InsertProjections ?? new List<TestProjection>();
                 InsertProjections.Add(projection as TestProjection);
+            }
+
+            public void Remove<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
+            {
+                RemoveFilterValues = values;
             }
         }
 
@@ -143,14 +149,14 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual(777, value.Value);
             }
 
@@ -227,14 +233,14 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual(777, value.Value);
             }
 
@@ -368,14 +374,14 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.FilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
                 Assert.AreEqual(777, value.Value);
             }
 
@@ -449,6 +455,56 @@ namespace FluentProjections.Tests
             {
                 _targetDenormalizer.Handle(new object());
                 Assert.Null(_targetStore.UpdateProjection);
+            }
+        }
+
+        [TestFixture]
+        public class When_event_remove_projection
+        {
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
+            {
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
+                {
+                    _store = store;
+
+                    On<TestEvent>()
+                        .Remove()
+                        .FilterBy(p => p.ValueInt32, e => e.ValueInt32);
+                }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
+            }
+
+            private TestStore _targetStore;
+
+            [TestFixtureSetUp]
+            public void Init()
+            {
+                _targetStore = new TestStore(null);
+
+                var @event = new TestEvent
+                {
+                    ValueInt32 = 777
+                };
+
+                new TestDenormalizer(_targetStore).Handle(@event);
+            }
+
+            [Test]
+            public void Should_filter_projection_with_correct_value()
+            {
+                Assert.AreEqual(777, _targetStore.RemoveFilterValues.Single().Value);
+            }
+
+            [Test]
+            public void Should_filter_projection_by_correct_property()
+            {
+                Assert.AreEqual("ValueInt32", _targetStore.RemoveFilterValues.Single().Property.Name);
             }
         }
     }
