@@ -131,6 +131,10 @@ Happy coding!
 What’s new?
 -----------
 
+**Feb 7th, 2014**      
+- Remove projection strategy added.
+- An action to set a projection property with constant value added.
+
 **Nov 30th, 2013**      
 Based on a feedback I had to make a significant change in a codebase:
 - Handler registerer removed.
