@@ -131,19 +131,19 @@ Happy coding!
 What’s new?
 -----------
 
-**Feb 16th, 2014 -v 0.4.1**      
+**0.0.4.1 Feb 16th, 2014**      
 - Conventional WithKey and FilterBy added.
 
-**Feb 7th, 2014 -v 0.4**      
+**0.0.4.0 Feb 7th, 2014**      
 - Remove projection strategy added.
 - An action to set a projection property with constant value added.
 
-**Nov 30th, 2013**      
+**0.0.3.0 Nov 30th, 2013**      
 Based on a feedback I had to make a significant change in a codebase:
 - Handler registerer removed.
 - Configurer turned into a FluentEventDenormalizer that you can inherit from and register as an event handler.
 
-**Nov 24th, 2013**      
+**0.0.1.5 Nov 24th, 2013**      
 - A codebase reorganized the way you need to reference the only root namespace.
 - Save method introduced - see configuration examples above.
 - AddNew method renamed to Insert so as it's more explicit.
@@ -151,7 +151,7 @@ Based on a feedback I had to make a significant change in a codebase:
 - All methods like Map, FilterBy, Key are implemented as extensions - it's possible to have custom methods now.
 - Class constraint added to TProjection in IFluentProjectionStore.
 
-**Nov 17th, 2013**      
+**0.0.1.3 Nov 17th, 2013**      
 - A single event can be translated into a series of objects. Translated objects can be handled the same way as other events.
 
 Who am I?
