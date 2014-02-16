@@ -40,6 +40,7 @@
     <Compile Include="EventHandlingStrategies\EventHandlingStrategy.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategyArguments.cs" />
+    <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="RemoveProjectionStrategyArgumentsExtensions.cs" />
     <Compile Include="MapperExtensions.cs" />
     <Compile Include="EventExtensions.cs" />

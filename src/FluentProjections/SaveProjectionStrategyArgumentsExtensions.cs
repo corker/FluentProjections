@@ -23,36 +23,36 @@ namespace FluentProjections
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
-            Mapper<TEvent, TProjection> mapper = GetMapper(projectionProperty, getValue);
-            Filter<TEvent> filter = GetFilter(projectionProperty, getValue);
-            source.AddKey(new Key<TEvent, TProjection>(filter, mapper));
+            Action<TProjection, TValue> action = ReflectionHelpers.CreateSetOperation(projectionProperty);
+            Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, getValue(e)));
+            Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, getValue);
+            Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
+            source.AddKey(key);
             return source;
         }
 
-        private static Mapper<TEvent, TProjection> GetMapper<TEvent, TProjection, TValue>(
-            Expression<Func<TProjection, TValue>> projectionProperty, Func<TEvent, TValue> getValue)
+        /// <summary>
+        ///     Update projection that matches a key or insert a new projection when no matching projection found by a property
+        ///     from an event with the same name as in a projection.
+        /// </summary>
+        /// <typeparam name="TEvent">An event type</typeparam>
+        /// <typeparam name="TProjection">A projection type</typeparam>
+        /// <typeparam name="TValue">A type of projection property</typeparam>
+        /// <param name="source">An argument builder that contains resulting mapper</param>
+        /// <param name="projectionProperty">An expression that identifies a projection property</param>
+        /// <returns>An argument builder that contains resulting filter</returns>
+        public static SaveProjectionStrategyArguments<TEvent, TProjection> WithKey<TEvent, TProjection, TValue>(
+            this SaveProjectionStrategyArguments<TEvent, TProjection> source,
+            Expression<Func<TProjection, TValue>> projectionProperty)
         {
-            var q = new Q<TEvent, TProjection>();
-            q.Map(projectionProperty, getValue);
-            return q.Mapper;
-        }
-
-        private static Filter<TEvent> GetFilter<TEvent, TProjection, TValue>(
-            Expression<Func<TProjection, TValue>> projectionProperty, Func<TEvent, TValue> getValue)
-        {
-            var memberExpression = (MemberExpression) projectionProperty.Body;
-            var property = (PropertyInfo) memberExpression.Member;
-            return new Filter<TEvent>(property, e => getValue(e));
-        }
-
-        private class Q<TEvent, TProjection> : IMappersBuilder<TEvent, TProjection>
-        {
-            public Mapper<TEvent, TProjection> Mapper { get; private set; }
-
-            public void AddMapper(Mapper<TEvent, TProjection> mapper)
-            {
-                Mapper = mapper;
-            }
+            PropertyInfo propertyInfo = ReflectionHelpers.GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
+            Func<TEvent, TValue> getValue = e => ReflectionHelpers.GetPropertyValue<TEvent, TValue>(e, propertyInfo);
+            Action<TProjection, TValue> action = ReflectionHelpers.CreateSetOperation(projectionProperty);
+            Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, getValue(e)));
+            Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, getValue);
+            Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
+            source.AddKey(key);
+            return source;
         }
     }
 }

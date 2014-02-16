@@ -6,7 +6,7 @@ namespace FluentProjections.EventHandlingStrategies.Arguments
     {
         private readonly Action<TEvent, TProjection> _action;
 
-        public Mapper(Action<TEvent, TProjection> action)
+        private Mapper(Action<TEvent, TProjection> action)
         {
             _action = action;
         }
@@ -14,6 +14,11 @@ namespace FluentProjections.EventHandlingStrategies.Arguments
         public void Apply(TEvent @event, TProjection projection)
         {
             _action(@event, projection);
+        }
+
+        public static Mapper<TEvent, TProjection> Create(Action<TEvent, TProjection> action)
+        {
+            return new Mapper<TEvent, TProjection>(action);
         }
     }
 }

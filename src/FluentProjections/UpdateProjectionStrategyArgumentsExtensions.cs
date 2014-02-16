@@ -23,9 +23,17 @@ namespace FluentProjections
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
-            var memberExpression = (MemberExpression)projectionProperty.Body;
-            var property = (PropertyInfo)memberExpression.Member;
-            source.AddFilter(new Filter<TEvent>(property, e => getValue(e)));
+            source.AddFilter(Filter<TEvent>.Create(projectionProperty, getValue));
+            return source;
+        }
+
+        public static UpdateProjectionStrategyArguments<TEvent, TProjection> FilterBy<TEvent, TProjection, TValue>(
+            this UpdateProjectionStrategyArguments<TEvent, TProjection> source, 
+            Expression<Func<TProjection, TValue>> projectionProperty)
+        {
+            PropertyInfo propertyInfo = ReflectionHelpers.GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
+            Func<TEvent, TValue> getValue = e => ReflectionHelpers.GetPropertyValue<TEvent, TValue>(e, propertyInfo);
+            source.AddFilter(Filter<TEvent>.Create(projectionProperty, getValue));
             return source;
         }
     }

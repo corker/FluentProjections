@@ -23,9 +23,7 @@ namespace FluentProjections
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
-            var memberExpression = (MemberExpression)projectionProperty.Body;
-            var property = (PropertyInfo)memberExpression.Member;
-            source.AddFilter(new Filter<TEvent>(property, e => getValue(e)));
+            source.AddFilter(Filter<TEvent>.Create(projectionProperty, getValue));
             return source;
         }
     }

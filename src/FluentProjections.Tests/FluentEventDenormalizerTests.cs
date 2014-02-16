@@ -118,6 +118,7 @@ namespace FluentProjections.Tests
                     On<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
+                        .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
                 }
 
@@ -149,15 +150,29 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual(777, value.Value);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info_conventionaly_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_conventionaly_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual(888, value.Value);
             }
 
             [Test]
@@ -199,6 +214,7 @@ namespace FluentProjections.Tests
                     On<TestEvent>()
                         .Save()
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
+                        .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64);
                 }
 
@@ -233,15 +249,29 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual(777, value.Value);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info_conventionally_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_conventionally_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual(888, value.Value);
             }
 
             [Test]
@@ -344,6 +374,7 @@ namespace FluentProjections.Tests
                     On<TestEvent>()
                         .Update()
                         .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
+                        .FilterBy(p => p.ValueInt64)
                         .Map(p => p.ValueInt32, e => e.ValueInt32);
                 }
 
@@ -365,7 +396,8 @@ namespace FluentProjections.Tests
 
                 var @event = new TestEvent
                 {
-                    ValueInt32 = 777
+                    ValueInt32 = 777,
+                    ValueInt64 = 888
                 };
 
                 new TestDenormalizer(_targetStore).Handle(@event);
@@ -374,15 +406,29 @@ namespace FluentProjections.Tests
             [Test]
             public void Should_filter_read_result_with_event_property_info()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Single();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
                 Assert.AreEqual(777, value.Value);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info_conventionaly_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_conventionaly_mapped()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                Assert.AreEqual(888, value.Value);
             }
 
             [Test]
