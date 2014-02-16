@@ -131,7 +131,10 @@ Happy coding!
 What’s new?
 -----------
 
-**Feb 7th, 2014**      
+**Feb 16th, 2014 -v 0.4.1**      
+- Conventional WithKey and FilterBy added.
+
+**Feb 7th, 2014 -v 0.4**      
 - Remove projection strategy added.
 - An action to set a projection property with constant value added.
 
