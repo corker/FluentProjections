@@ -38,6 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EventHandlingStrategies\EventHandlingStrategy.cs" />
+    <Compile Include="EventHandlingStrategies\IEventHandlingStrategyConfiguration.cs" />
+    <Compile Include="EventHandlingStrategies\IContainEventHandlingStrategyFactory.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategyArguments.cs" />
     <Compile Include="ReflectionHelpers.cs" />
@@ -57,7 +59,7 @@
     <Compile Include="EventHandlingStrategies\SaveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\TranslateStrategy.cs" />
     <Compile Include="EventHandlingStrategies\UpdateProjectionStrategy.cs" />
-    <Compile Include="EventHandlingStrategies\EventHandlingStrategyFactory.cs" />
+    <Compile Include="EventHandlingStrategies\EventHandlingStrategyFactoryContainer.cs" />
     <Compile Include="FluentEventDenormalizer.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Filter.cs" />
     <Compile Include="EventHandlingStrategies\Arguments\Filters.cs" />
@@ -66,7 +68,6 @@
     <Compile Include="EventHandlingStrategies\Arguments\Mappers.cs" />
     <Compile Include="IFluentProjectionStore.cs" />
     <Compile Include="EventHandlingStrategies\IEventHandlingStrategy.cs" />
-    <Compile Include="EventHandlingStrategies\IEventHandlingStrategyFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventHandlingStrategies\AddNewProjectionStrategyArguments.cs" />
   </ItemGroup>

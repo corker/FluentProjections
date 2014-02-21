@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentProjections.EventHandlingStrategies;
 
@@ -10,54 +11,96 @@ namespace FluentProjections
     /// <typeparam name="TProjection">A type to project events on</typeparam>
     public abstract class FluentEventDenormalizer<TProjection> where TProjection : class, new()
     {
-        private readonly List<IEventHandlingStrategyFactory> _factories;
+        private readonly Router _router;
 
         protected FluentEventDenormalizer()
         {
-            _factories = new List<IEventHandlingStrategyFactory>();
+            _router = new Router();
         }
 
         /// <summary>
         ///     Register an event handler that can be configured with extensions.
         /// </summary>
         /// <typeparam name="TEvent">A type of an event</typeparam>
-        protected EventHandlingStrategyFactory<TEvent, TProjection> On<TEvent>()
+        protected void On<TEvent>(Action<EventHandlingStrategyFactoryContainer<TEvent, TProjection>> configurer)
         {
-            var factory = new EventHandlingStrategyFactory<TEvent, TProjection>();
-            _factories.Add(factory);
-            return factory;
+            _router.Add(configurer);
         }
 
         /// <summary>
-        ///     Handle event with all registered handlers.
+        ///     Handle event by all registered handlers.
         /// </summary>
         /// <param name="event">An event to be handled</param>
         /// <param name="store">A store to read and write projections</param>
         protected void Handle(object @event, IFluentProjectionStore store)
         {
-            IEnumerable<IEventHandlingStrategy> strategies = _factories.Select(x => x.Create());
-
-            foreach (IEventHandlingStrategy strategy in strategies)
-            {
-                strategy.Handle(@event, store);
-            }
+            _router.Route(@event, store);
         }
 
-        /// <summary>
-        ///     Handle event of type <typeparam name="TEvent"></typeparam> with handlers registered for this type.
-        /// </summary>
-        /// <typeparam name="TEvent">A type of event</typeparam>
-        /// <param name="event">An event to be handled</param>
-        /// <param name="store">A store to read and write projections</param>
-        protected void Handle<TEvent>(TEvent @event, IFluentProjectionStore store)
+        private class Router
         {
-            IEnumerable<IEventHandlingStrategy<TEvent>> strategies = _factories
-                .OfType<IEventHandlingStrategyFactory<TEvent>>()
-                .Select(x => x.Create());
+            private readonly List<IHandleEvents> _handlers = new List<IHandleEvents>();
 
-            foreach (var strategy in strategies)
+            public void Add<TEvent>(Action<EventHandlingStrategyFactoryContainer<TEvent, TProjection>> configurer)
             {
-                strategy.Handle(@event, store);
+                _handlers.Add(new EventHandler<TEvent>(configurer));
+            }
+
+            public void Route(object @event, IFluentProjectionStore store)
+            {
+                IEnumerable<IHandleEvents> handlers = FindHandlers(@event);
+                foreach (IHandleEvents handler in handlers)
+                {
+                    handler.Handle(@event, store);
+                }
+            }
+
+            private IEnumerable<IHandleEvents> FindHandlers(object @event)
+            {
+                Type eventType = @event.GetType();
+                return _handlers.Where(x => x.EventType == eventType);
+            }
+
+            private interface IHandleEvents
+            {
+                Type EventType { get; }
+                void Handle(object @event, IFluentProjectionStore store);
+            }
+
+            private class EventHandler<TEvent> : IHandleEvents
+            {
+                private readonly Action<EventHandlingStrategyFactoryContainer<TEvent, TProjection>> _configurer;
+                private EventHandlingStrategyFactoryContainer<TEvent, TProjection> _factoryContainer;
+                private IEventHandlingStrategy<TEvent> _strategy;
+
+                public EventHandler(Action<EventHandlingStrategyFactoryContainer<TEvent, TProjection>> configurer)
+                {
+                    EventType = typeof (TEvent);
+                    _configurer = configurer;
+                }
+
+                public Type EventType { get; private set; }
+
+                public void Handle(object @event, IFluentProjectionStore store)
+                {
+                    EnsureStrategy();
+                    _strategy.Handle(@event, store);
+                }
+
+                private void EnsureStrategy()
+                {
+                    EnsureStrategyFactory();
+                    _strategy = _strategy ?? _factoryContainer.Create();
+                }
+
+                private void EnsureStrategyFactory()
+                {
+                    if (_factoryContainer == null)
+                    {
+                        _factoryContainer = new EventHandlingStrategyFactoryContainer<TEvent, TProjection>();
+                        _configurer(_factoryContainer);
+                    }
+                }
             }
         }
     }

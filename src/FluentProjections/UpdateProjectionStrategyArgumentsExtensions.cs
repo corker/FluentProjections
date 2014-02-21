@@ -9,7 +9,7 @@ namespace FluentProjections
     public static class UpdateProjectionStrategyArgumentsExtensions
     {
         /// <summary>
-        /// Update projections that match a filter.
+        ///     Update projections that match a filter.
         /// </summary>
         /// <typeparam name="TEvent">An event type</typeparam>
         /// <typeparam name="TProjection">A projection type</typeparam>
@@ -27,8 +27,17 @@ namespace FluentProjections
             return source;
         }
 
+        /// <summary>
+        ///     Update projections that match a filter by a property from an event with the same name as in a projection.
+        /// </summary>
+        /// <typeparam name="TEvent">An event type</typeparam>
+        /// <typeparam name="TProjection">A projection type</typeparam>
+        /// <typeparam name="TValue">A type of projection property</typeparam>
+        /// <param name="source">An argument builder that contains resulting mapper</param>
+        /// <param name="projectionProperty">An expression that identifies a projection property</param>
+        /// <returns>An argument builder that contains resulting filter</returns>
         public static UpdateProjectionStrategyArguments<TEvent, TProjection> FilterBy<TEvent, TProjection, TValue>(
-            this UpdateProjectionStrategyArguments<TEvent, TProjection> source, 
+            this UpdateProjectionStrategyArguments<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
         {
             PropertyInfo propertyInfo = ReflectionHelpers.GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
