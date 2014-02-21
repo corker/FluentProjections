@@ -40,11 +40,11 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
     {
         _store = store;
 
-        On<ConcertCreated>()
+        On<ConcertCreated>(x => x
             .AddNew()
             .Map(projection.Id)
             .Map(projection.ConcertDate)
-            .Map(projection.ConcertTitle);
+            .Map(projection.ConcertTitle));
     }
 
     public void Handle(ConcertCreated @event) // This is a handler for ConcertCreated event
@@ -57,7 +57,7 @@ public class ConcertProjectionDenormalizer : FluentEventDenormalizer<ConcertProj
 An incoming event can be translated into a series of other objects:
 
 ```
-    On<ConcertCreated>()
+    On<ConcertCreated>(x => x
         .Translate(concert => new[]
         {
             new DefineSeat { Id = concert.Seats.First().SeatId, ... },
@@ -65,20 +65,20 @@ An incoming event can be translated into a series of other objects:
         })
         .AddNew()
         .Map(projection => projection.Id)
-        .Map(projection => projection.Location, seat => seat.SeatLocation);
+        .Map(projection => projection.Location, seat => seat.SeatLocation));
 ```
 
 The same denormalizer can contain many event handlers. Simply register all of them in a single constructor:
 ```
-    On<ConcertCreated>()
+    On<ConcertCreated>(x => x
         .Translate(...)
         .AddNew()
-        .Map(...);
+        .Map(...));
 
-    On<SeatLocationCorrected>()
+    On<SeatLocationCorrected>(x => x
         .Update()
         .FilterBy(...)
-        .Map(...);
+        .Map(...));
 ```
 
 A signle handler can be defined for all registered events in a denormalizer:
@@ -100,11 +100,11 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
     {
         _store = store;
 
-        On<ConcertCreated>()
+        On<ConcertCreated>(x => x
             .Save() // update a projection that matches provided key(s) or create a new one
             .Key(p => p.Year, e => e.Date.Year)
             .Key(p => p.Month, e => e.Date.Month)
-            .Increment(p => p.Concerts);
+            .Increment(p => p.Concerts));
     }
 
     public void Handle(object @event)
@@ -130,6 +130,9 @@ Happy coding!
 
 What’s new?
 -----------
+
+**0.0.5.0 Feb 22nd, 2014**      
+- Breaking change. Instead of returning a handler configurator fromo method On<TEvent> the one is passed as an argument to an action that is an argument for On<TEvent>. This was done for performance reason.
 
 **0.0.4.1 Feb 16th, 2014**      
 - Conventional WithKey and FilterBy added.
