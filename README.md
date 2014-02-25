@@ -81,7 +81,7 @@ The same denormalizer can contain many event handlers. Simply register all of th
         .Map(...));
 ```
 
-A signle handler can be defined for all registered events in a denormalizer:
+A single handler can be defined for all registered events in a denormalizer:
 
 ```
     public void Handle(object @event)
