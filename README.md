@@ -132,8 +132,8 @@ What’s new?
 -----------
 
 **0.0.6.0 Apr 3rd, 2014**      
-- Breaking change. FilterBy renamed to WhenEqual. I consider to extend filtering later with WhenLess, WhenGreater, WhenLessOrEqual and WhenGreaterOrEqual.
-- Now filtering is possible by constant values.
+- Breaking change. FilterBy renamed to WhenEqual. Filtering will be extended with WhenLess, WhenGreater, WhenLessOrEqual and WhenGreaterOrEqual.
+- Filtering is possible by constant values from now.
 
 **0.0.5.0 Feb 22nd, 2014**      
 - Breaking change. Instead of returning a handler configurator fromo method On<TEvent> the one is passed as an argument to an action that is an argument for On<TEvent>. This was done for performance reason.
