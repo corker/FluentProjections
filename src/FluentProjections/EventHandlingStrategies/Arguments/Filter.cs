@@ -33,9 +33,19 @@ namespace FluentProjections.EventHandlingStrategies.Arguments
             Expression<Func<TProjection, TValue>> projectionProperty, 
             TValue value)
         {
-            var memberExpression = (MemberExpression)projectionProperty.Body;
-            var property = (PropertyInfo)memberExpression.Member;
-            return new Filter<TEvent>(property, e => value);
+            var unaryExpression = projectionProperty.Body as UnaryExpression;
+            if (unaryExpression != null && unaryExpression.NodeType == ExpressionType.Convert)
+            {
+                var memberExpression = (MemberExpression)unaryExpression.Operand;
+                var property = (PropertyInfo)memberExpression.Member;
+                return new Filter<TEvent>(property, e => value);
+            }
+            else
+            {
+                var memberExpression = (MemberExpression)projectionProperty.Body;
+                var property = (PropertyInfo)memberExpression.Member;
+                return new Filter<TEvent>(property, e => value);
+            }
         }
     }
 }

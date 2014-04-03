@@ -172,7 +172,8 @@ namespace FluentProjections
         /// <returns>An argument builder that contains resulting mapper</returns>
         public static IMappersBuilder<TEvent, TProjection> Set<TEvent, TProjection, TValue>(
             this IMappersBuilder<TEvent, TProjection> source,
-            Expression<Func<TProjection, TValue>> projectionProperty, TValue value)
+            Expression<Func<TProjection, TValue>> projectionProperty, 
+            TValue value)
         {
             return source.Do((e, p) => ReflectionHelpers.CreateSetOperation(projectionProperty)(p, value));
         }

@@ -119,7 +119,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Remove()
-                        .WhenEqual(p => p.ValueInt16, (short)555)
+                        .WhenEqual(p => p.ValueInt16, 555)
                         .WhenEqual(p => p.ValueInt32, e => e.ValueInt32)
                         .WhenEqual(p => p.ValueInt64));
                 }
@@ -196,7 +196,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Save()
-                        .WithKey(p => p.ValueInt16, (short)555)
+                        .WithKey(p => p.ValueInt16, 555)
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64));
@@ -307,7 +307,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Save()
-                        .WithKey(p => p.ValueInt16, (short)555)
+                        .WithKey(p => p.ValueInt16, 555)
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64));
@@ -483,7 +483,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Update()
-                        .WhenEqual(p => p.ValueInt16, (short)555)
+                        .WhenEqual(p => p.ValueInt16, 555)
                         .WhenEqual(p => p.ValueInt32, e => e.ValueInt32)
                         .WhenEqual(p => p.ValueInt64)
                         .Map(p => p.ValueInt32, e => e.ValueInt32));
