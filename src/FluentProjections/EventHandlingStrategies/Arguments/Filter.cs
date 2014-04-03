@@ -28,5 +28,14 @@ namespace FluentProjections.EventHandlingStrategies.Arguments
             var property = (PropertyInfo)memberExpression.Member;
             return new Filter<TEvent>(property, e => getValue(e));
         }
+
+        public static Filter<TEvent> Create<TProjection, TValue>(
+            Expression<Func<TProjection, TValue>> projectionProperty, 
+            TValue value)
+        {
+            var memberExpression = (MemberExpression)projectionProperty.Body;
+            var property = (PropertyInfo)memberExpression.Member;
+            return new Filter<TEvent>(property, e => value);
+        }
     }
 }

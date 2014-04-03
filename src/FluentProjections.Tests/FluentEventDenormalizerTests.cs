@@ -8,12 +8,14 @@ namespace FluentProjections.Tests
     {
         private class TestEvent
         {
+            public short ValueInt16 { get; set; }
             public int ValueInt32 { get; set; }
             public long ValueInt64 { get; set; }
         }
 
         private class TestProjection
         {
+            public short ValueInt16 { get; set; }
             public int ValueInt32 { get; set; }
             public long ValueInt64 { get; set; }
         }
@@ -117,8 +119,9 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Remove()
-                        .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
-                        .FilterBy(p => p.ValueInt64));
+                        .WhenEqual(p => p.ValueInt16, (short)555)
+                        .WhenEqual(p => p.ValueInt32, e => e.ValueInt32)
+                        .WhenEqual(p => p.ValueInt64));
                 }
 
                 public void Handle(TestEvent @event)
@@ -144,27 +147,39 @@ namespace FluentProjections.Tests
             }
 
             [Test]
+            public void Should_filter_projection_by_correct_property_mapped_to_constant()
+            {
+                Assert.AreEqual("ValueInt16", _targetStore.RemoveFilterValues.First().Property.Name);
+            }
+
+            [Test]
             public void Should_filter_projection_by_correct_property()
             {
-                Assert.AreEqual("ValueInt32", _targetStore.RemoveFilterValues.First().Property.Name);
+                Assert.AreEqual("ValueInt32", _targetStore.RemoveFilterValues.Skip(1).First().Property.Name);
             }
 
             [Test]
             public void Should_filter_projection_by_correct_property_conventionaly_mapped()
             {
-                Assert.AreEqual("ValueInt64", _targetStore.RemoveFilterValues.Last().Property.Name);
+                Assert.AreEqual("ValueInt64", _targetStore.RemoveFilterValues.Skip(2).First().Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_projection_with_correct_value_mapped_to_constant()
+            {
+                Assert.AreEqual(555, _targetStore.RemoveFilterValues.First().Value);
             }
 
             [Test]
             public void Should_filter_projection_with_correct_value()
             {
-                Assert.AreEqual(777, _targetStore.RemoveFilterValues.First().Value);
+                Assert.AreEqual(777, _targetStore.RemoveFilterValues.Skip(1).First().Value);
             }
 
             [Test]
             public void Should_filter_projection_with_correct_value_conventionaly_mapped()
             {
-                Assert.AreEqual(888, _targetStore.RemoveFilterValues.Last().Value);
+                Assert.AreEqual(888, _targetStore.RemoveFilterValues.Skip(2).First().Value);
             }
         }
 
@@ -181,6 +196,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Save()
+                        .WithKey(p => p.ValueInt16, (short)555)
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64));
@@ -212,30 +228,44 @@ namespace FluentProjections.Tests
             }
 
             [Test]
-            public void Should_filter_read_result_with_event_property_info()
+            public void Should_filter_read_result_with_event_property_info_mapped_to_constant()
             {
                 FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual("ValueInt16", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_info_conventionaly_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_mapped_to_constant()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual(555, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual(777, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value_conventionaly_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual(888, value.Value);
             }
 
@@ -277,6 +307,7 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Save()
+                        .WithKey(p => p.ValueInt16, (short)555)
                         .WithKey(p => p.ValueInt32, e => e.ValueInt32)
                         .WithKey(p => p.ValueInt64)
                         .Map(p => p.ValueInt64, e => e.ValueInt64));
@@ -311,36 +342,51 @@ namespace FluentProjections.Tests
             }
 
             [Test]
-            public void Should_filter_read_result_with_event_property_info()
+            public void Should_filter_read_result_with_event_property_info_mapped_to_constant()
             {
                 FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual("ValueInt16", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_info_conventionally_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_mapped_to_constant()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual(555, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual(777, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value_conventionally_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual(888, value.Value);
             }
 
             [Test]
             public void Should_map_keys()
             {
+                Assert.AreEqual(555, _targetStore.InsertProjections.Single().ValueInt16);
                 Assert.AreEqual(777, _targetStore.InsertProjections.Single().ValueInt32);
             }
 
@@ -437,8 +483,9 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Update()
-                        .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
-                        .FilterBy(p => p.ValueInt64)
+                        .WhenEqual(p => p.ValueInt16, (short)555)
+                        .WhenEqual(p => p.ValueInt32, e => e.ValueInt32)
+                        .WhenEqual(p => p.ValueInt64)
                         .Map(p => p.ValueInt32, e => e.ValueInt32));
                 }
 
@@ -468,30 +515,44 @@ namespace FluentProjections.Tests
             }
 
             [Test]
-            public void Should_filter_read_result_with_event_property_info()
+            public void Should_filter_read_result_with_event_property_info_mapped_to_constant()
             {
                 FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual("ValueInt16", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_info()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual("ValueInt32", value.Property.Name);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_info_conventionaly_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual("ValueInt64", value.Property.Name);
+            }
+
+            [Test]
+            public void Should_filter_read_result_with_event_property_value_mapped_to_constant()
+            {
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                Assert.AreEqual(555, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.First();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(1).First();
                 Assert.AreEqual(777, value.Value);
             }
 
             [Test]
             public void Should_filter_read_result_with_event_property_value_conventionaly_mapped()
             {
-                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Last();
+                FluentProjectionFilterValue value = _targetStore.ReadFilterValues.Skip(2).First();
                 Assert.AreEqual(888, value.Value);
             }
 
@@ -535,7 +596,6 @@ namespace FluentProjections.Tests
 
                     On<TestEvent>(x => x
                         .Update()
-                        .FilterBy(p => p.ValueInt32, e => e.ValueInt32)
                         .Map(p => p.ValueInt32, e => e.ValueInt32));
                 }
 

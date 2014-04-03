@@ -54,5 +54,29 @@ namespace FluentProjections
             source.AddKey(key);
             return source;
         }
+
+        /// <summary>
+        ///     Update projection that matches a key or insert a new projection when no matching projection found by a provided
+        ///     value.
+        /// </summary>
+        /// <typeparam name="TEvent">An event type</typeparam>
+        /// <typeparam name="TProjection">A projection type</typeparam>
+        /// <typeparam name="TValue">A type of projection property</typeparam>
+        /// <param name="source">An argument builder that contains resulting mapper</param>
+        /// <param name="projectionProperty">An expression that identifies a projection property</param>
+        /// <param name="value"></param>
+        /// <returns>An argument builder that contains resulting filter</returns>
+        public static SaveProjectionStrategyArguments<TEvent, TProjection> WithKey<TEvent, TProjection, TValue>(
+            this SaveProjectionStrategyArguments<TEvent, TProjection> source,
+            Expression<Func<TProjection, TValue>> projectionProperty,
+            TValue value)
+        {
+            Action<TProjection, TValue> action = ReflectionHelpers.CreateSetOperation(projectionProperty);
+            Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, value));
+            Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, value);
+            Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
+            source.AddKey(key);
+            return source;
+        }
     }
 }
