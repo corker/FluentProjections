@@ -77,7 +77,7 @@ The same denormalizer can contain many event handlers. Simply register all of th
 
     On<SeatLocationCorrected>(x => x
         .Update()
-        .FilterBy(...)
+        .WhenEqual(...)
         .Map(...));
 ```
 
@@ -102,8 +102,8 @@ public class MonthStatisticsDenormalizer : FluentEventDenormalizer<MonthStatisti
 
         On<ConcertCreated>(x => x
             .Save() // update a projection that matches provided key(s) or create a new one
-            .Key(p => p.Year, e => e.Date.Year)
-            .Key(p => p.Month, e => e.Date.Month)
+            .WithKey(p => p.Year, e => e.Date.Year)
+            .WithKey(p => p.Month, e => e.Date.Month)
             .Increment(p => p.Concerts));
     }
 
@@ -130,6 +130,10 @@ Happy coding!
 
 What’s new?
 -----------
+
+**0.0.6.0 Apr 3rd, 2014**      
+- Breaking change. FilterBy renamed to WhenEqual. I consider to extend filtering later with WhenLess, WhenGreater, WhenLessOrEqual and WhenGreaterOrEqual.
+- Now filtering is possible by constant values.
 
 **0.0.5.0 Feb 22nd, 2014**      
 - Breaking change. Instead of returning a handler configurator fromo method On<TEvent> the one is passed as an argument to an action that is an argument for On<TEvent>. This was done for performance reason.
