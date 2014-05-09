@@ -27,7 +27,7 @@ namespace FluentProjections
             Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, getValue(e)));
             Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, getValue);
             Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
-            source.AddKey(key);
+            source.Register(key);
             return source;
         }
 
@@ -51,7 +51,7 @@ namespace FluentProjections
             Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, getValue(e)));
             Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, getValue);
             Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
-            source.AddKey(key);
+            source.Register(key);
             return source;
         }
 
@@ -75,7 +75,7 @@ namespace FluentProjections
             Mapper<TEvent, TProjection> mapper = Mapper<TEvent, TProjection>.Create((e, p) => action(p, value));
             Filter<TEvent> filter = Filter<TEvent>.Create(projectionProperty, value);
             Key<TEvent, TProjection> key = Key<TEvent, TProjection>.Create(filter, mapper);
-            source.AddKey(key);
+            source.Register(key);
             return source;
         }
     }

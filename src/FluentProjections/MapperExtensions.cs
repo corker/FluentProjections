@@ -15,11 +15,11 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="action">An action to perform on projection</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Do<TEvent, TProjection>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Do<TEvent, TProjection>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Action<TEvent, TProjection> action)
         {
-            source.AddMapper(Mapper<TEvent, TProjection>.Create(action));
+            source.Register(Mapper<TEvent, TProjection>.Create(action));
             return source;
         }
 
@@ -33,8 +33,8 @@ namespace FluentProjections
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
@@ -50,8 +50,8 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Map<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
         {
             PropertyInfo propertyInfo = ReflectionHelpers.GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
@@ -68,8 +68,8 @@ namespace FluentProjections
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
         {
@@ -85,8 +85,8 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Add<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
             where TValue : IComparable<TValue>
         {
@@ -102,8 +102,8 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Increment<TEvent, TProjection>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Increment<TEvent, TProjection>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, long>> projectionProperty)
         {
             return source.Add(projectionProperty, e => 1);
@@ -119,8 +119,8 @@ namespace FluentProjections
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="getValue">A function to extract a value from an event</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue) where TValue : IComparable<TValue>
         {
@@ -136,8 +136,8 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Substract<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty)
             where TValue : IComparable<TValue>
         {
@@ -153,8 +153,8 @@ namespace FluentProjections
         /// <param name="source">An argument builder that contains resulting mapper</param>
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Decrement<TEvent, TProjection>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Decrement<TEvent, TProjection>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, long>> projectionProperty)
         {
             return source.Substract(projectionProperty, e => 1);
@@ -170,16 +170,16 @@ namespace FluentProjections
         /// <param name="projectionProperty">An expression that identifies a projection property</param>
         /// <param name="value">A new value for the property</param>
         /// <returns>An argument builder that contains resulting mapper</returns>
-        public static IMappersBuilder<TEvent, TProjection> Set<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        public static IRegisterMappers<TEvent, TProjection> Set<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Expression<Func<TProjection, TValue>> projectionProperty, 
             TValue value)
         {
             return source.Do((e, p) => ReflectionHelpers.CreateSetOperation(projectionProperty)(p, value));
         }
 
-        private static IMappersBuilder<TEvent, TProjection> Do<TEvent, TProjection, TValue>(
-            this IMappersBuilder<TEvent, TProjection> source,
+        private static IRegisterMappers<TEvent, TProjection> Do<TEvent, TProjection, TValue>(
+            this IRegisterMappers<TEvent, TProjection> source,
             Action<TProjection, TValue> action,
             Func<TEvent, TValue> getValue)
         {

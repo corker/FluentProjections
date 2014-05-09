@@ -23,7 +23,7 @@ namespace FluentProjections
             Expression<Func<TProjection, TValue>> projectionProperty,
             Func<TEvent, TValue> getValue)
         {
-            source.AddFilter(Filter<TEvent>.Create(projectionProperty, getValue));
+            source.Register(Filter<TEvent>.Create(projectionProperty, getValue));
             return source;
         }
 
@@ -42,7 +42,7 @@ namespace FluentProjections
         {
             PropertyInfo propertyInfo = ReflectionHelpers.GetEventPropertyInfo<TEvent, TProjection, TValue>(projectionProperty);
             Func<TEvent, TValue> getValue = e => ReflectionHelpers.GetPropertyValue<TEvent, TValue>(e, propertyInfo);
-            source.AddFilter(Filter<TEvent>.Create(projectionProperty, getValue));
+            source.Register(Filter<TEvent>.Create(projectionProperty, getValue));
             return source;
         }
 
@@ -61,7 +61,7 @@ namespace FluentProjections
             Expression<Func<TProjection, TValue>> projectionProperty,
             TValue value)
         {
-            source.AddFilter(Filter<TEvent>.Create(projectionProperty, value));
+            source.Register(Filter<TEvent>.Create(projectionProperty, value));
             return source;
         }
     }

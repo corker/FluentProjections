@@ -3,7 +3,7 @@ using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class RemoveProjectionStrategyArguments<TEvent, TProjection> : IFiltersBuilder<TEvent, TProjection>
+    public class RemoveProjectionStrategyArguments<TEvent, TProjection> : IRegisterFilters<TEvent, TProjection>
     {
         private readonly List<Filter<TEvent>> _filters;
 
@@ -12,7 +12,7 @@ namespace FluentProjections.EventHandlingStrategies
             _filters = new List<Filter<TEvent>>();
         }
 
-        public void AddFilter(Filter<TEvent> filter)
+        public void Register(Filter<TEvent> filter)
         {
             _filters.Add(filter);
         }

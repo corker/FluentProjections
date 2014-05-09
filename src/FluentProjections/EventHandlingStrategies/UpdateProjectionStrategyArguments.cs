@@ -3,7 +3,7 @@ using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class UpdateProjectionStrategyArguments<TEvent, TProjection> : IFiltersBuilder<TEvent, TProjection>, IMappersBuilder<TEvent, TProjection>
+    public class UpdateProjectionStrategyArguments<TEvent, TProjection> : IRegisterFilters<TEvent, TProjection>, IRegisterMappers<TEvent, TProjection>
     {
         private readonly List<Filter<TEvent>> _filters;
         private readonly List<Mapper<TEvent, TProjection>> _mappers;
@@ -14,12 +14,12 @@ namespace FluentProjections.EventHandlingStrategies
             _filters = new List<Filter<TEvent>>();
         }
 
-        public void AddMapper(Mapper<TEvent, TProjection> mapper)
+        public void Register(Mapper<TEvent, TProjection> mapper)
         {
             _mappers.Add(mapper);
         }
 
-        public void AddFilter(Filter<TEvent> filter)
+        public void Register(Filter<TEvent> filter)
         {
             _filters.Add(filter);
         }

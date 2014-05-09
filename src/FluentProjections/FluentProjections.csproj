@@ -52,9 +52,9 @@
     <Compile Include="EventHandlingStrategies\Arguments\Keys.cs" />
     <Compile Include="SaveProjectionStrategyArgumentsExtensions.cs" />
     <Compile Include="UpdateProjectionStrategyArgumentsExtensions.cs" />
-    <Compile Include="EventHandlingStrategies\Arguments\IMappersBuilder.cs" />
-    <Compile Include="EventHandlingStrategies\Arguments\IKeysBuilder.cs" />
-    <Compile Include="EventHandlingStrategies\Arguments\IFiltersBuilder.cs" />
+    <Compile Include="EventHandlingStrategies\Arguments\IRegisterMappers.cs" />
+    <Compile Include="EventHandlingStrategies\Arguments\IRegisterKeys.cs" />
+    <Compile Include="EventHandlingStrategies\Arguments\IRegisterFilters.cs" />
     <Compile Include="EventHandlingStrategies\AddNewProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\SaveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\TranslateStrategy.cs" />

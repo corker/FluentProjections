@@ -3,7 +3,7 @@ using FluentProjections.EventHandlingStrategies.Arguments;
 
 namespace FluentProjections.EventHandlingStrategies
 {
-    public class SaveProjectionStrategyArguments<TEvent, TProjection> : IKeysBuilder<TEvent, TProjection>
+    public class SaveProjectionStrategyArguments<TEvent, TProjection> : IRegisterKeys<TEvent, TProjection>
     {
         private readonly List<Key<TEvent, TProjection>> _keys;
         private readonly List<Mapper<TEvent, TProjection>> _mappers;
@@ -14,12 +14,12 @@ namespace FluentProjections.EventHandlingStrategies
             _keys = new List<Key<TEvent, TProjection>>();
         }
 
-        public void AddMapper(Mapper<TEvent, TProjection> mapper)
+        public void Register(Mapper<TEvent, TProjection> mapper)
         {
             _mappers.Add(mapper);
         }
 
-        public void AddKey(Key<TEvent, TProjection> key)
+        public void Register(Key<TEvent, TProjection> key)
         {
             _keys.Add(key);
         }
