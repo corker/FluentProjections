@@ -6,7 +6,7 @@ using FluentProjections.EventHandlingStrategies;
 namespace FluentProjections
 {
     /// <summary>
-    ///     A base class for a projection denormalizer.
+    ///     A base class for your projection denormalizers.
     /// </summary>
     /// <typeparam name="TProjection">A type to project events on</typeparam>
     public abstract class FluentEventDenormalizer<TProjection> where TProjection : class, new()
@@ -48,23 +48,17 @@ namespace FluentProjections
 
             public void Route(object @event, IFluentProjectionStore store)
             {
-                IEnumerable<IHandleEvents> handlers = FindHandlers(@event);
+                IEnumerable<IHandleEvents> handlers = GetHandlers(@event);
                 foreach (IHandleEvents handler in handlers)
                 {
                     handler.Handle(@event, store);
                 }
             }
 
-            private IEnumerable<IHandleEvents> FindHandlers(object @event)
+            private IEnumerable<IHandleEvents> GetHandlers(object @event)
             {
                 Type eventType = @event.GetType();
                 return _handlers.Where(x => x.EventType == eventType);
-            }
-
-            private interface IHandleEvents
-            {
-                Type EventType { get; }
-                void Handle(object @event, IFluentProjectionStore store);
             }
 
             private class EventHandler<TEvent> : IHandleEvents
@@ -101,6 +95,12 @@ namespace FluentProjections
                         _configurer(_factoryContainer);
                     }
                 }
+            }
+
+            private interface IHandleEvents
+            {
+                Type EventType { get; }
+                void Handle(object @event, IFluentProjectionStore store);
             }
         }
     }

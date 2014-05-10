@@ -42,6 +42,17 @@
     <Compile Include="EventHandlingStrategies\IContainEventHandlingStrategyFactory.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategy.cs" />
     <Compile Include="EventHandlingStrategies\RemoveProjectionStrategyArguments.cs" />
+    <Compile Include="Logging\Generic\ILog.cs" />
+    <Compile Include="Logging\Generic\LogProvider.cs" />
+    <Compile Include="Logging\LoggerExecutionWrapper.cs" />
+    <Compile Include="Logging\LogProvider.cs" />
+    <Compile Include="Logging\ILogProvider.cs" />
+    <Compile Include="Logging\ILog.cs" />
+    <Compile Include="Logging\ILogExtensions.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\LogProviders\Log4NetLogProvider.cs" />
+    <Compile Include="Logging\LogProviders\NLogLogProvider.cs" />
+    <Compile Include="Logging\Generic\LogWrapper.cs" />
     <Compile Include="ReflectionHelpers.cs" />
     <Compile Include="RemoveProjectionStrategyArgumentsExtensions.cs" />
     <Compile Include="MapperExtensions.cs" />
@@ -76,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Logging\licence.txt" />
+    <None Include="Logging\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
