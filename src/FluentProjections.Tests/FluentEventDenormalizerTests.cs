@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentProjections.AutoMapper;
 using NUnit.Framework;
+using AutoMapperMapper = AutoMapper.Mapper;
 
 namespace FluentProjections.Tests
 {
@@ -70,6 +72,59 @@ namespace FluentProjections.Tests
                     On<TestEvent>(x => x
                         .AddNew()
                         .Map(p => p.ValueInt32, e => e.ValueInt32));
+                }
+
+                public void Handle(TestEvent @event)
+                {
+                    Handle(@event, _store);
+                }
+            }
+
+            private TestStore _targetStore;
+
+            [TestFixtureSetUp]
+            public void Init()
+            {
+                _targetStore = new TestStore(null);
+
+                var @event = new TestEvent
+                {
+                    ValueInt32 = 777
+                };
+
+                new TestDenormalizer(_targetStore).Handle(@event);
+            }
+
+            [Test]
+            public void Should_add_new_projection()
+            {
+                Assert.AreEqual(1, _targetStore.InsertProjections.Count);
+            }
+
+            [Test]
+            public void Should_map_values()
+            {
+                Assert.AreEqual(777, _targetStore.InsertProjections.Single().ValueInt32);
+            }
+        }
+
+        [TestFixture]
+        public class When_event_add_new_projection_and_auto_map_properties
+        {
+            private class TestDenormalizer : FluentEventDenormalizer<TestProjection>
+            {
+                static TestDenormalizer()
+                {
+                    AutoMapperMapper.CreateMap<TestEvent, TestProjection>();
+                }
+
+                private readonly IFluentProjectionStore _store;
+
+                public TestDenormalizer(IFluentProjectionStore store)
+                {
+                    _store = store;
+
+                    On<TestEvent>(x => x.AddNew().AutoMap());
                 }
 
                 public void Handle(TestEvent @event)
