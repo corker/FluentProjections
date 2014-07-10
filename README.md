@@ -131,6 +131,10 @@ Happy coding!
 What’s new?
 -----------
 
+**1.0.0.0 May 10th, 2014**      
+- Logging functionality.
+- AutoMapper integration.
+
 **0.0.6.0 Apr 3rd, 2014**      
 - Breaking change. FilterBy renamed to WhenEqual. Filtering will be extended with WhenLess, WhenGreater, WhenLessOrEqual and WhenGreaterOrEqual.
 - Filtering is possible by constant values from now.
