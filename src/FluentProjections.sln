@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections", "FluentProjections\FluentProjections.csproj", "{E59CE405-E7FC-4E3C-B2C2-8390A977BC98}"
 EndProject
@@ -23,6 +23,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.Dapper", "FluentProjections.Dapper\FluentProjections.Dapper.csproj", "{233E4E9D-675B-4ED8-9ACB-831F8112472E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.AutoMapper", "FluentProjections.AutoMapper\FluentProjections.AutoMapper.csproj", "{4193FB0C-FD5F-44FB-BB48-70EF9104B84B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.ValueInjecter", "FluentProjections.ValueInjecter\FluentProjections.ValueInjecter.csproj", "{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{4193FB0C-FD5F-44FB-BB48-70EF9104B84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4193FB0C-FD5F-44FB-BB48-70EF9104B84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4193FB0C-FD5F-44FB-BB48-70EF9104B84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

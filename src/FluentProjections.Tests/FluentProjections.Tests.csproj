@@ -55,6 +55,10 @@
       <Project>{4193fb0c-fd5f-44fb-bb48-70ef9104b84b}</Project>
       <Name>FluentProjections.AutoMapper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FluentProjections.ValueInjecter\FluentProjections.ValueInjecter.csproj">
+      <Project>{3eb03698-e202-4ead-9acd-6c7f0980d4ef}</Project>
+      <Name>FluentProjections.ValueInjecter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FluentProjections\FluentProjections.csproj">
       <Project>{E59CE405-E7FC-4E3C-B2C2-8390A977BC98}</Project>
       <Name>FluentProjections</Name>
