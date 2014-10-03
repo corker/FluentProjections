@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.AutoMappe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.ValueInjecter", "FluentProjections.ValueInjecter\FluentProjections.ValueInjecter.csproj", "{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.EntityFramework", "FluentProjections.EntityFramework\FluentProjections.EntityFramework.csproj", "{D49AF6F8-8761-4963-B3AC-3D04996E1A12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentProjections.EntityFramework.Tests", "FluentProjections.EntityFramework.Tests\FluentProjections.EntityFramework.Tests.csproj", "{F43F4EBD-BF8E-4E42-8881-FE744D85C49E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +56,14 @@ Global
 		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EB03698-E202-4EAD-9ACD-6C7F0980D4EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D49AF6F8-8761-4963-B3AC-3D04996E1A12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49AF6F8-8761-4963-B3AC-3D04996E1A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D49AF6F8-8761-4963-B3AC-3D04996E1A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D49AF6F8-8761-4963-B3AC-3D04996E1A12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F43F4EBD-BF8E-4E42-8881-FE744D85C49E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F43F4EBD-BF8E-4E42-8881-FE744D85C49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F43F4EBD-BF8E-4E42-8881-FE744D85C49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F43F4EBD-BF8E-4E42-8881-FE744D85C49E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

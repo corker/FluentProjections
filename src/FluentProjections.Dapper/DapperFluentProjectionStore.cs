@@ -11,9 +11,17 @@ namespace FluentProjections.Dapper
     public class DapperFluentProjectionStore : IFluentProjectionStore
     {
         private readonly IDbTransaction _transaction;
+        private readonly IDbConnection _connection;
+
+        public DapperFluentProjectionStore(IDbConnection connection)
+        {
+            _connection = connection;
+            _transaction = null;
+        }
 
         public DapperFluentProjectionStore(IDbTransaction transaction)
         {
+            _connection = transaction.Connection;
             _transaction = transaction;
         }
 
@@ -33,17 +41,17 @@ namespace FluentProjections.Dapper
                         .Cast<IPredicate>()
                         .ToList()
                 };
-            return _transaction.Connection.GetList<TProjection>(predicate, null, _transaction);
+            return _connection.GetList<TProjection>(predicate, null, _transaction);
         }
 
         public void Update<TProjection>(TProjection projection) where TProjection : class
         {
-            _transaction.Connection.Update(projection, _transaction);
+            _connection.Update(projection, _transaction);
         }
 
         public void Insert<TProjection>(TProjection projection) where TProjection : class
         {
-            _transaction.Connection.Insert(projection, _transaction);
+            _connection.Insert(projection, _transaction);
         }
 
         public void Remove<TProjection>(IEnumerable<FluentProjectionFilterValue> values) where TProjection : class
@@ -61,7 +69,7 @@ namespace FluentProjections.Dapper
                         .Cast<IPredicate>()
                         .ToList()
                 };
-            _transaction.Connection.Delete<TProjection>(predicate, _transaction);
+            _connection.Delete<TProjection>(predicate, _transaction);
         }
     }
 }
