@@ -3,6 +3,7 @@ using AutoMapperMapper = AutoMapper.Mapper;
 
 namespace FluentProjections.AutoMapper
 {
+
     public static class MapperExtensions
     {
         /// <summary>
