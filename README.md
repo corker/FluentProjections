@@ -13,12 +13,10 @@ What?
 
 With this project I want to minimize an effort on defining event denormalizers by providing a semantic way of doing it. I beleive it's great if I can type "On a concert created event add a new projection with a concert date and title" and a computer could translate it into a code. What do you think?
 
-The codebase was split by components:
+[FluentProjections](https://github.com/corker/FluentProjections) - The main package. An implementation for a generic message handler.
 
-[FluentProjections](https://github.com/corker/FluentProjections)
+[FluentProjections.AutoMapper](https://github.com/corker/FluentProjections.AutoMapper) - An extension to automatically map message properties to a projection using AutoMapper package.
 
-[FluentProjections.AutoMapper](https://github.com/corker/FluentProjections.AutoMapper)
+[FluentProjections.ValueInjecter](https://github.com/corker/FluentProjections.ValueInjecter) - An extension to automatically map message properties to a projection using ValueInjecter package.
 
-[FluentProjections.ValueInjecter](https://github.com/corker/FluentProjections.ValueInjecter)
-
-[FluentProjections.Persistence.SQL](https://github.com/corker/FluentProjections.Persistence.SQL)
+[FluentProjections.Persistence.SQL](https://github.com/corker/FluentProjections.Persistence.SQL) - An extension to store projections into a relational database using Dapper and DapperExtension packages.
