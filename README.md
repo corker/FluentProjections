@@ -16,6 +16,9 @@ With this project I want to minimize an effort on defining event denormalizers b
 The codebase was split by components:
 
 [FluentProjections](https://github.com/corker/FluentProjections)
+
 [FluentProjections.AutoMapper](https://github.com/corker/FluentProjections.AutoMapper)
+
 [FluentProjections.ValueInjecter](https://github.com/corker/FluentProjections.ValueInjecter)
+
 [FluentProjections.Persistence.SQL](https://github.com/corker/FluentProjections.Persistence.SQL)
