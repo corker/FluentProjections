@@ -1,7 +1,7 @@
 FluentProjections
 ==================
 
-This package provides a configurable hub that can handle events and map them onto event projection tables (read models).
+FluentProjections is a configurable hub that can map messages onto projections and store them into a database of your choice.
 
 Why?
 ====
