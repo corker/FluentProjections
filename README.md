@@ -22,4 +22,5 @@ With this project I want to minimize an effort on defining event denormalizers b
 [FluentProjections.ValueInjecter](https://github.com/corker/FluentProjections.ValueInjecter)
 - An extension to automatically map message properties to a projection using ValueInjecter package.
 
-[FluentProjections.Persistence.SQL](https://github.com/corker/FluentProjections.Persistence.SQL) - An extension to store projections into a relational database using Dapper and DapperExtension packages.
+[FluentProjections.Persistence.SQL](https://github.com/corker/FluentProjections.Persistence.SQL)
+- An extension to store projections into a relational database using Dapper and DapperExtension packages.
