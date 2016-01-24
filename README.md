@@ -1,5 +1,6 @@
 FluentProjections [![Build status](https://ci.appveyor.com/api/projects/status/kdt0pv546527w4kc?svg=true)](https://ci.appveyor.com/project/corker/fluentprojections) [![NuGet Status](http://img.shields.io/nuget/v/FluentProjections.svg?style=flat)](https://www.nuget.org/packages/FluentProjections/)
 ==================
+[![Join the chat at https://gitter.im/corker/FluentProjections](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/corker/FluentProjections?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This package provides a configurable hub that can handle events and map them onto event projection tables (read models).
 
