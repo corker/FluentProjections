@@ -124,13 +124,11 @@ Next to the main package you can try the following extensions:
 > An extension to store projections into a relational database using Dapper and DapperExtension packages.
 
 
-The package is fully covered with unit tests. Although if you experience any issues please feel free to report it on  [twitter](https://twitter.com/search?q=fluentprojections&src=typd), [issues page](https://github.com/corker/fluent-projections/issues) or [StackOverflow](http://stackoverflow.com/questions/tagged/fluent-projections).
-
 What’s new?
 -----------
 
 **2.10.0 January 20th, 2016**      
-- Fully functional version is available.
+- Fully functional version including SQL support.
 
 Who am I?
 --
