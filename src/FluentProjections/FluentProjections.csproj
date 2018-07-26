@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <Authors>Michael Borisov</Authors>
+    <Copyright>Copyright Michael Borisov © 2018</Copyright>
+    <Description>Fluent Projections provides a configurable hub that handles messages and map them to database projections (read models).</Description>
+    <PackageTags>CQRS;EventSource</PackageTags>
+    <PackageLicenseUrl>https://raw.github.com/corker/FluentProjections/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/corker/FluentProjections</PackageProjectUrl>
+  </PropertyGroup>
+
+  <!-- common NuGet package refs that affect all projects -->
+  <ItemGroup>
+  </ItemGroup>
+
+  <!-- common properties that affect all projects -->
+  <PropertyGroup>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <!-- .NET Standard 2.0 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+  </ItemGroup>
+
+  <!-- .NET 4.0 references, compilation flags and build options -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
+    <DefineConstants>NET45;NETFULL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40'">
+  </ItemGroup>
+
+</Project>

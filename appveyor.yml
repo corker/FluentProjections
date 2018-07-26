@@ -1,0 +1,33 @@
+version: 3.0.{build}
+
+configuration: Release
+
+image: Visual Studio 2017
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj;**\*.props'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
+nuget:
+  project_feed: true
+
+before_build:
+  - cmd: dotnet --info
+  - cmd: dotnet restore --verbosity Minimal
+
+build_script:
+  - cmd: dotnet build src\FluentProjections --configuration %CONFIGURATION%
+
+after_build:
+  - cmd: dotnet pack src\FluentProjections --configuration %CONFIGURATION% --include-symbols --no-build --output ..\..\nupkgs /p:PackageVersion=%APPVEYOR_BUILD_VERSION%
+
+test_script:
+  - cmd: dotnet test tests\FluentProjections.Tests\FluentProjections.Tests.csproj --configuration %CONFIGURATION%
+
+artifacts:
+  - path: nupkgs\*.nupkg
